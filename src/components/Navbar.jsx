@@ -5,6 +5,7 @@ import { useAuth } from '../components/AuthContext'; // Access user context
 import { signOut } from 'firebase/auth';
 import { auth } from '../config/firebase';
 import { useNavigate, Link } from 'react-router-dom';
+import { HexagonLetterV } from 'tabler-icons-react';
 
 const Navbar = () => {
   const { user } = useAuth(); // Get user from context
@@ -25,8 +26,8 @@ const Navbar = () => {
     <AppBar position="static">
       <Toolbar>
         {/* Link to Map */}
-        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-          Map
+        <Typography variant="h3" component="div" sx={{ flexGrow: 1 }}>
+          DogLog
         </Typography>
         <Button color="inherit" component={Link} to="/map">Map</Button>
         {/* Link to Activity page */}
