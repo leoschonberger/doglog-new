@@ -28,6 +28,7 @@ const Navbar = () => {
         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
           Map
         </Typography>
+        <Button color="inherit" component={Link} to="/map">Map</Button>
         {/* Link to Activity page */}
         <Button color="inherit" component={Link} to="/activity">
           Activity

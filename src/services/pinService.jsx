@@ -1,24 +1,12 @@
 // pinService.js
+// Service functions for fetching user-specific pins from Firestore
+
 import { db } from '../config/firebase';
-import { collection, addDoc, updateDoc, deleteDoc, doc, getDocs } from 'firebase/firestore';
+import { collection, query, where, orderBy, getDocs } from 'firebase/firestore';
 
 export const fetchPins = async (userId) => {
-  const pinsCollection = collection(db, 'users', userId, 'pins');
-  const querySnapshot = await getDocs(pinsCollection);
+  const pinsRef = collection(db, 'pins');
+  const q = query(pinsRef, where('userId', '==', userId), orderBy('timestamp', 'desc'));
+  const querySnapshot = await getDocs(q);
   return querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-};
-
-export const createPin = async (userId, pinData) => {
-  const pinsCollection = collection(db, 'users', userId, 'pins');
-  return await addDoc(pinsCollection, pinData);
-};
-
-export const updatePin = async (userId, pinId, updatedData) => {
-  const pinRef = doc(db, 'users', userId, 'pins', pinId);
-  return await updateDoc(pinRef, updatedData);
-};
-
-export const deletePin = async (userId, pinId) => {
-  const pinRef = doc(db, 'users', userId, 'pins', pinId);
-  return await deleteDoc(pinRef);
 };
