@@ -1,6 +1,6 @@
 // Map.js
 import React, { useEffect, useState } from 'react';
-import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, useMap, useMapEvents} from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import { Box, Container } from '@mui/material';
@@ -49,6 +49,7 @@ const Map = () => {
       }
     );
   }, []);
+
 
   // Fetch pins from Firestore and handle missing fields
   useEffect(() => {
@@ -99,6 +100,7 @@ const Map = () => {
             </Popup>
           </Marker>
         ))}
+        
       </MapContainer>
     </Container>
   );

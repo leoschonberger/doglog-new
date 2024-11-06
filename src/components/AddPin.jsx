@@ -40,7 +40,7 @@ const AddPin = ({ clickedLocation }) => {
           <TextField label="Latitude" fullWidth value={latitude} onChange={(e) => setLatitude(e.target.value)} />
           <TextField label="Longitude" fullWidth value={longitude} onChange={(e) => setLongitude(e.target.value)} />
           <TextField label="Title" fullWidth value={title} onChange={(e) => setTitle(e.target.value)} />
-          <TextField label="Timestamp" type="datetime-local" fullWidth onChange={(e) => setTimestamp(new Date(e.target.value))} />
+          <TextField label="" type="datetime-local" fullWidth onChange={(e) => setTimestamp(new Date(e.target.value))} />
           <Button type="submit" variant="contained">Add Pin</Button>
         </form>
       </Box>

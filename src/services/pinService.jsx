@@ -10,3 +10,15 @@ export const fetchPins = async (userId) => {
   const querySnapshot = await getDocs(q);
   return querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
 };
+
+export const addPin = async (pin) => {
+  await addDoc(collection(db, 'pins'), pin);
+}
+
+export const deletePin = async (pinId) => {
+  await deleteDoc(doc(db, 'pins', pinId));
+}
+
+export const updatePin = async (pinId, pin) => {
+  await setDoc(doc(db, 'pins', pinId), pin);
+}

@@ -15,7 +15,9 @@ const MapPage = () => {
       {/* <Navbar /> */}
       <Container maxWidth="md">
         <Map onMapClick={setClickedLocation} />
+        <Box mt={4}> {/* Adds margin-top of 4 units */}
         <AddPin clickedLocation={clickedLocation} />
+        </Box>
       </Container>
     </Box>
   );

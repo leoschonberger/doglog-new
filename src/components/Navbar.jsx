@@ -5,7 +5,6 @@ import { useAuth } from '../components/AuthContext'; // Access user context
 import { signOut } from 'firebase/auth';
 import { auth } from '../config/firebase';
 import { useNavigate, Link } from 'react-router-dom';
-import { HexagonLetterV } from 'tabler-icons-react';
 
 const Navbar = () => {
   const { user } = useAuth(); // Get user from context
@@ -39,7 +38,7 @@ const Navbar = () => {
             Sign Out
           </Button>
         ) : (
-          <Button color="inherit" onClick={() => navigate('/login')}>
+          <Button color="inherit" onClick={() => navigate('/')}>
             Login
           </Button>
         )}
