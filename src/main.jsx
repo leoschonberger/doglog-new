@@ -7,10 +7,6 @@ import { MantineProvider } from "@mantine/core";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <MantineProvider>
-          <NotificationsProvider autoClose={3000}>
             <App />
-          </NotificationsProvider>
-    </MantineProvider>
   </React.StrictMode>
 );

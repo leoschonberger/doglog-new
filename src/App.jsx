@@ -1,52 +1,27 @@
-import { useState } from "react";
-import styled from "styled-components";
-import { Tabs } from "@mantine/core";
+// App.js
+// Main application component with routing for different pages
 
-import TabLayout from "./components/TabLayout";
-import TodoItems from "./components/TodoItems";
-import Navbar from "./components/Navbar";
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Navbar from './components/Navbar';
+import MapPage from './pages/MapPage';
+import Login from './components/Login';
+import ActivityPage from './pages/ActivityPage';
+import { AuthProvider } from './components/AuthContext';
 
-const Container = styled.main`
-  padding: 2rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-`;
-
-const App = () => {
-  const [isAuth, setIsAuth] = useState(false);
-  const [profile, setProfile] = useState({});
-
-  console.log({ isAuth, profile });
-
+function App() {
   return (
-    <Container>
-      <Navbar
-        isAuth={isAuth}
-        setIsAuth={setIsAuth}
-        profile={profile}
-        setProfile={setProfile}
-      />
-      <Tabs tabPadding="xl" sx={{ marginTop: "2rem" }}>
-        <Tabs.Tab label="All" sx={{ padding: "20px 75px" }}>
-          <TabLayout uid={profile.uid}>
-            <TodoItems show="all" uid={profile.uid} />
-          </TabLayout>
-        </Tabs.Tab>
-        <Tabs.Tab label="Active" sx={{ padding: "20px 75px" }}>
-          <TabLayout uid={profile.uid}>
-            <TodoItems show="active" uid={profile.uid} />
-          </TabLayout>
-        </Tabs.Tab>
-        <Tabs.Tab label="Completed" sx={{ padding: "20px 75px" }}>
-          <TabLayout uid={profile.uid}>
-            <TodoItems show="completed" uid={profile.uid} />
-          </TabLayout>
-        </Tabs.Tab>
-      </Tabs>
-    </Container>
+    <AuthProvider>
+      <Router>
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<Login />} />
+          <Route path="/map" element={<MapPage />} />
+          <Route path="/activity" element={<ActivityPage />} />
+        </Routes>
+      </Router>
+    </AuthProvider>
   );
-};
+}
 
 export default App;
