@@ -51,19 +51,25 @@ const Map = () => {
   }, []);
 
 
-  // Fetch pins from Firestore and handle missing fields
+  // Fetch pins from Firestore
   useEffect(() => {
     const loadPins = async () => {
       try {
         const pinsData = await fetchPins();
-        const validPins = pinsData.map((pin) => ({
-          id: pin.id,
-          title: pin.title || "Untitled Pin", // Default title if missing
-          latitude: pin.latitude ?? 0, // Default latitude
-          longitude: pin.longitude ?? 0, // Default longitude
-          timestamp: pin.timestamp || { seconds: Date.now() / 1000 }, // Default timestamp
-        }));
-        setMapPins(validPins);
+        if (Array.isArray(pinsData)) {
+          const validPins = pinsData
+            .filter((pin) => pin.latitude && pin.longitude)
+            .map((pin) => ({
+              id: pin.id,
+              title: pin.title || "Untitled Pin",
+              latitude: pin.latitude,
+              longitude: pin.longitude,
+              description: pin.description || "",
+            }));
+          setPins(validPins);
+        } else {
+          console.error("Invalid pins data format");
+        }
       } catch (error) {
         console.error("Error fetching pins:", error);
       }
