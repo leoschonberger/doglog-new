@@ -21,6 +21,7 @@ const AddPin = ({ clickedLocation }) => {
     description: '',
   });
 
+
   // updates the longitude and latitude of the pin when a location is clicked on the map
   // May or may not work right now, 
   useEffect(() => {
@@ -32,6 +33,32 @@ const AddPin = ({ clickedLocation }) => {
       }));
     }
   }, [clickedLocation]);
+
+  useEffect(() => {
+    const loadPins = async () => {
+      try {
+        const pinsData = await fetchPins(user.uid);
+        console.log('Fetched pins:', pinsData);
+        if (Array.isArray(pinsData)) {
+          const validPins = pinsData
+            .filter((pin) => pin.latitude && pin.longitude)
+            .map((pin) => ({
+              id: pin.id,
+              title: pin.title || "Untitled Pin",
+              latitude: pin.latitude,
+              longitude: pin.longitude,
+              description: pin.description || "",
+            }));
+          setPins(validPins);
+        } else {
+          console.error("Invalid pins data format");
+        }
+      } catch (error) {
+        console.error("Error fetching pins:", error);
+      }
+    };
+    loadPins();
+  }, [user]);
 
   const handleAddPin = async (e) => {
     e.preventDefault();
@@ -49,6 +76,7 @@ const AddPin = ({ clickedLocation }) => {
     try {
       await addPin(newPin);
       console.log('Pin added successfully');
+      onPinAdded();
     } catch (error) {
       console.error('Error adding pin:', error);
     }
