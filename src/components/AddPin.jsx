@@ -5,7 +5,7 @@ import React, { useState, useEffect } from 'react';
 import { TextField, Button, Box, Typography, Container } from '@mui/material';
 import { useAuth } from '../components/AuthContext';
 import { addPin } from '../services/pinService';
-import { Timestamp } from 'firebase/firestore';
+import { Timestamp, addDoc, collection } from 'firebase/firestore';
 
 const AddPin = ({ clickedLocation }) => {
   // Authenticate user
