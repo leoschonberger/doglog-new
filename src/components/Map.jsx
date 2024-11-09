@@ -1,10 +1,11 @@
 // Map.js
 import React, { useEffect, useState } from 'react';
-import { MapContainer, TileLayer, Marker, Popup, useMap, useMapEvents} from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
-import { Box, Container } from '@mui/material';
+import { Container } from '@mui/material';
 import { fetchPins } from '../services/pinService'; // Import the fetchPins function
+import { useAuth } from '../components/AuthContext';
 
 // Custom icon for pins
 const pinIcon = new L.Icon({
@@ -33,9 +34,9 @@ const LocationMarker = ({ position }) => {
   ) : null;
 };
 
-const Map = () => {
+const Map = ({ pins, onMapClick }) => {
+  const { user } = useAuth();
   const [userLocation, setUserLocation] = useState(null);
-  const [pins, setPins] = useState([]); // State to store pins
 
   // Fetch user location
   useEffect(() => {
@@ -50,39 +51,13 @@ const Map = () => {
     );
   }, []);
 
-
-  // Fetch pins from Firestore
-  useEffect(() => {
-    const loadPins = async () => {
-      try {
-        const pinsData = await fetchPins();
-        if (Array.isArray(pinsData)) {
-          const validPins = pinsData
-            .filter((pin) => pin.latitude && pin.longitude)
-            .map((pin) => ({
-              id: pin.id,
-              title: pin.title || "Untitled Pin",
-              latitude: pin.latitude,
-              longitude: pin.longitude,
-              description: pin.description || "",
-            }));
-          setPins(validPins);
-        } else {
-          console.error("Invalid pins data format");
-        }
-      } catch (error) {
-        console.error("Error fetching pins:", error);
-      }
-    };
-    loadPins();
-  }, []);
-
   return (
     <Container maxWidth="md" sx={{ mt: 4 }}>
       <MapContainer
         center={userLocation || [51.505, -0.09]} // Default center if location is not set
         zoom={13}
         style={{ height: '500px', width: '100%' }}
+        onClick={(e) => onMapClick(e.latlng)}
       >
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
