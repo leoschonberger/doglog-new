@@ -46,7 +46,7 @@ const Map = ({ pins, onMapClick }) => {
       },
       (error) => {
         console.error('Error fetching location:', error);
-        setUserLocation([51.505, -0.09]); // Default to London if location access denied
+        setUserLocation([44.042265, -123.074378]); // Default to London if location access denied
       }
     );
   }, []);
@@ -54,7 +54,7 @@ const Map = ({ pins, onMapClick }) => {
   return (
     <Container maxWidth="md" sx={{ mt: 4 }}>
       <MapContainer
-        center={userLocation || [51.505, -0.09]} // Default center if location is not set
+        center={userLocation || [44.042265, -123.074378]} // Default center if location is not set
         zoom={13}
         style={{ height: '500px', width: '100%' }}
         onClick={(e) => onMapClick(e.latlng)}
