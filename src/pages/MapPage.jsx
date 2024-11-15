@@ -4,6 +4,8 @@
 import React, { useState, useEffect } from 'react';
 import Map from '../components/Map';
 import AddPin from '../components/AddPin';
+import UpdatePin from '../components/UpdatePin';
+import RemovePin from '../components/RemovePin';
 import { Box, Container } from '@mui/material';
 import { fetchPins } from '../services/pinService';
 import { useAuth } from '../components/AuthContext';
@@ -45,6 +47,12 @@ const MapPage = () => {
         <Map pins={pins} onMapClick={setClickedLocation} />
         <Box mt={4}> {/* Adds margin-top of 4 units */}
           <AddPin clickedLocation={clickedLocation} onPinAdded={loadPins} />
+        </Box>
+        <Box mt={4}>
+          <RemovePin onPinRemoved={loadPins} />
+        </Box>
+        <Box mt={4}>
+          <UpdatePin onPinUpdated={loadPins} />
         </Box>
       </Container>
     </Box>
