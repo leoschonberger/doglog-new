@@ -7,7 +7,7 @@ import { db } from '../config/firebase';
 import { collection, addDoc, Timestamp } from 'firebase/firestore';
 import { useAuth } from '../components/AuthContext';
 import { addPin, fetchPins } from '../services/pinService'
-import { fetchNames } from '../services/dogService'
+import { fetchDogs } from '../services/dogService'
 
 const AddPin = ({ clickedLocation, onPinAdded }) => {
   const { user } = useAuth();
@@ -59,7 +59,7 @@ const AddPin = ({ clickedLocation, onPinAdded }) => {
   useEffect(() => {
     const loadDogNames = async () => {
       try {
-        const names = await fetchNames(user.uid);
+        const names = await fetchDogs(user.uid);
         setDogNames(names);
         console.log('Fetched dog names:', names);
       } catch (error) {
