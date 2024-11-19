@@ -22,7 +22,7 @@ const ActivityList = () => {
     // Fetch the authenticated user's dogs from db
     const getDogs = async () => {
         const dogData = fetchDogs(user.uid);
-        console.log("Dog Data: ", dogData);
+        // console.log("Dog Data: ", dogData);
         return dogData;
     }
 
@@ -36,7 +36,7 @@ const ActivityList = () => {
     const handleDogSelect = (event) => {
         const selectedDogId = event.target.value;
         const dog = selectedDogId === "all" ? "all" : dogs.find((dog) => dog.id === selectedDogId);
-        console.log("Selected Dog: ", dog);
+        // console.log("Selected Dog: ", dog);
         setSelectedDog(dog); // Set the entire dog object
       };
     
