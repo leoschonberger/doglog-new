@@ -2,7 +2,7 @@
 // Service functions for fetching user-specific pins from Firestore
 
 import { db } from '../config/firebase';
-import { collection, query, where, orderBy, getDocs } from 'firebase/firestore';
+import { collection, query, where, orderBy, getDocs, addDoc } from 'firebase/firestore';
 
 export const fetchPins = async (userId) => {
   const pinsRef = collection(db, 'pins');
