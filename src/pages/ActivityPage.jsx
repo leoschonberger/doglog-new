@@ -2,89 +2,70 @@
 // Component to display the user's pins in chronological order
 
 import React, { useEffect, useState } from 'react';
-import { Box, Typography, Card, CardContent, Button, CircularProgress } from '@mui/material';
+import { Box, Typography, Card, CardContent, Button, Stack } from '@mui/material';
 import { useAuth } from '../components/AuthContext';
 import { fetchPins } from '../services/pinService';
-import { fetchEvents, setEvent, deleteEvent } from '../services/eventService';
+// import { fetchEvents, setEvent, deleteEvent } from '../services/eventService';
+import { fetchDogs } from '../services/dogService';
+
 
 const ActivityPage = () => {
-  const { user } = useAuth();
-  const [events, setEvents] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [pins, setPins] = useState([]);
+  const { user } = useAuth(); // Get the authenticated user
+
+  // Mock fetchPins function
+  const fetchPinsServer = async () => {
+    // Replace this with your actual fetch API call
+    const pin_data = fetchPins(user.uid);
+    return pin_data;
+  };
+
+  // Format the value based on the key (so JS doesn't yell at me)
+  const formatValue = (key, value) => {
+    if (key === "timestamp" && typeof value === "object" && value.seconds && value.nanoseconds) {
+      // Convert timestamp to a readable date string
+      const date = new Date(value.seconds * 1000 + value.nanoseconds / 1000000);
+      return date.toLocaleString(); // Format to a readable string
+    }
+
+    // Ensure all other values are stringified or directly returned as valid ReactNode
+    if (typeof value === "object") {
+      return JSON.stringify(value); // Convert objects to strings
+    }
+
+    return value !== undefined && value !== null ? value.toString() : "N/A"; // Handle undefined/null
+  };
 
   useEffect(() => {
-    const fetchUserEvents = async () => {
-      if (user && user.uid) {
-        setLoading(true); // Set loading to true before fetching
-        const fetchedEvents = await fetchEvents(user.uid);
-        setEvents(fetchedEvents);
-        setLoading(false); // Set loading to false after fetching
-      } else {
-        setLoading(false); // Set loading to false if user is not available
+    const getPins = async () => {
+      if (user) {
+        const data = await fetchPinsServer();
+        setPins(data);
+        console.log(data); // Log the data to see what it looks like. TODO: Remove this line
       }
     };
-    fetchUserEvents();
+    getPins();
   }, [user]);
 
-  if (loading) {
-    return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
-        <CircularProgress />
-      </Box>
-    );
+  if (!user) {
+    return <Typography variant="h6">Please log in to view your pins.</Typography>;
   }
 
-    return (
-      <Box sx={{ backgroundColor: '#6F92DA', padding: 2, minHeight: '100vh' }}>
-        <Box
-          sx={{
-            backgroundColor: '#4CB386',
-            padding: 2,
-            borderRadius: 2,
-            maxWidth: 600,
-            margin: '0 auto',
-          }}
-        >
-          <Typography variant="h6" color="text.primary" sx={{ marginBottom: 2 }}>
-            Event Card List
-          </Typography>
-
-            {/* Add a new event button */}
-            <Button
-            variant="contained"
-            color="primary"
-            onClick={async () => {
-              const newEvent = {
-              dog_id: '1800',
-              event_type: 'Poop',
-              timestamp: 'Now!',
-              description: 'Big Poop',
-              };
-              const savedEvent = await setEvent(user.uid, newEvent);
-              setEvents([savedEvent, ...events]);
-            }}
-            >
-            Add New Event
-            </Button>
-
-          {events.map((event, index) => (
-            <Card key={index} sx={{ backgroundColor: '#FF5A5A', marginY: 1 }}>
-              <CardContent>
-                <Typography variant="subtitle1">
-                  {(event.dog_id || 'Unknown Dog') + ' - ' + (event.event_type || 'Unknown Event')}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  {event.timestamp || 'No Timestamp'}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  {event.description || 'No Description'}
-                </Typography>
-              </CardContent>
-            </Card>
-          ))}
-        </Box>
-      </Box>
-    );
-  }
+  return (
+    <Stack spacing={2} alignItems="center">
+      {pins.map((pin) => (
+        <Card key={pin.id} style={{ width: 300 }}>
+          <CardContent>
+            {Object.entries(pin).map(([key, value]) => (
+              <Typography variant="body2" key={key.toString()}>
+                <strong>{key.toString()}:</strong> {formatValue(key,value)}
+              </Typography>
+            ))}
+          </CardContent>
+        </Card>
+      ))}
+    </Stack>
+  );
+};
 
 export default ActivityPage;
