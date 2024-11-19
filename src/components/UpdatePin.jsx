@@ -50,6 +50,7 @@ const UpdatePin = ({ onPinUpdated }) => {
         }
     }, [originalTitle, user]);
 
+    // Function to clear the input fields
     const clearInputs = () => {
         setLatitude('');
         setLongitude('');
@@ -107,11 +108,36 @@ const UpdatePin = ({ onPinUpdated }) => {
                     margin="normal"
                 />
                 <form onSubmit={handleUpdatePin}>
-                    <TextField label="Latitude" fullWidth value={latitude} onChange={(e) => setLatitude(e.target.value)} sx={{ mb: 1 }} />
-                    <TextField label="Longitude" fullWidth value={longitude} onChange={(e) => setLongitude(e.target.value)} sx={{ mb: 1 }} />
-                    <TextField label="Title" fullWidth value={title} onChange={(e) => setTitle(e.target.value)} sx={{ mb: 1 }} />
-                    <TextField label="Timestamp" type="datetime-local" fullWidth value={timestamp.toISOString().slice(0, 16)} onChange={(e) => setTimestamp(new Date(e.target.value))} sx={{ mb: 1 }} />
-                    <Button type="submit" variant="contained" sx={{ mt: 1 }}>Update Pin</Button>
+                    <TextField 
+                        label="Latitude" 
+                        fullWidth 
+                        value={latitude} 
+                        onChange={(e) => setLatitude(e.target.value)} 
+                        sx={{ mb: 1 }} 
+                    />
+                    <TextField 
+                        label="Longitude" 
+                        fullWidth 
+                        value={longitude} 
+                        onChange={(e) => setLongitude(e.target.value)} 
+                        sx={{ mb: 1 }} 
+                    />
+                    <TextField 
+                        label="Title" 
+                        fullWidth 
+                        value={title} 
+                        onChange={(e) => setTitle(e.target.value)} 
+                        sx={{ mb: 1 }} 
+                    />
+                    <TextField 
+                        label="Timestamp" 
+                        type="datetime-local" 
+                        fullWidth 
+                        value={timestamp} 
+                        onChange={(e) => setTimestamp(new Date(e.target.value))} 
+                        sx={{ mb: 1 }} 
+                    />
+                    <Button type="submit" variant="contained">Update Pin</Button>
                 </form>
             </Box>
         </Container>

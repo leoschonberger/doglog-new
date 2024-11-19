@@ -2,7 +2,7 @@
 // Form component that allows users to remove pins by title
 
 import { removePin } from '../services/pinService';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useAuth } from '../components/AuthContext';
 import { TextField, Button, Box, Typography, Container } from '@mui/material';
 
@@ -22,14 +22,13 @@ const RemovePin = ({ onPinRemoved }) => {
             await removePin(user.uid, title);
             console.log('Pin removed successfully');
             onPinRemoved();
-
-            // Reset the title state
-            setTitle('');
         
         // Log the error and reset the title state
         } catch (error) {
-            setTitle('');
             console.error('Error removing pin:', error);
+        
+        } finally {
+            setTitle('');
         }
     };
 
@@ -44,6 +43,7 @@ const RemovePin = ({ onPinRemoved }) => {
                         fullWidth
                         value={title}
                         onChange={(e) => setTitle(e.target.value)}
+                        margin="normal"
                     />
                     <Button type="submit" variant="contained">Remove Pin</Button>
                 </form>
