@@ -2,7 +2,7 @@
 // Form component that allows users to add pins with location, title, and timestamp
 
 import React, { useState, useEffect } from 'react';
-import { TextField, Button, Box, Typography, Container, Select, MenuItem, InputLabel, FormControl } from '@mui/material';
+import { TextField, Button, Box, Typography, Container, Select, MenuItem, InputLabel, FormControl, Card, CardContent } from '@mui/material';
 import { db } from '../config/firebase';
 import { collection, addDoc, Timestamp } from 'firebase/firestore';
 import { useAuth } from '../components/AuthContext';
@@ -73,63 +73,74 @@ const AddPin = ({ clickedLocation, onPinAdded }) => {
 
   return (
     <Container maxWidth="sm">
-      <Box>
-        <Typography variant="h5">Add New Pin</Typography>
-        <form onSubmit={handleAddPin}>
-          <TextField
-            label="Latitude"
-            fullWidth
-            value={latitude}
-            onChange={(e) => setLatitude(e.target.value)}
-          />
-          <TextField
-            label="Longitude"
-            fullWidth
-            value={longitude}
-            onChange={(e) => setLongitude(e.target.value)}
-          />
-          <FormControl fullWidth>
-            <InputLabel>Dog</InputLabel>
-            <Select
-              value={dogID}
-              onChange={(e) => setDogID(e.target.value)}
-            >
-              {dogNames.map(([id, name]) => (
-                <MenuItem key={id} value={id}>{name}</MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-          <FormControl fullWidth>
-            <InputLabel>Event</InputLabel>
-            <Select
-              value={event}
-              onChange={(e) => setEvent(e.target.value)}
-            >
-              <MenuItem value="Restroom">Restroom</MenuItem>
-              <MenuItem value="Meal">Meal</MenuItem>
-              <MenuItem value="Exercise">Exercise</MenuItem>
-            </Select>
-          </FormControl>
-          <TextField 
-            label="Title" 
-            fullWidth value={title} 
-            onChange={(e) => setTitle(e.target.value)} 
-          />
-          <TextField 
-            label="Description" 
-            fullWidth value={description} 
-            onChange={(e) => setDescription(e.target.value)} 
-          />
-          <TextField 
-            label="Timestamp" 
-            type="datetime-local" 
-            fullWidth 
-            value={timestamp.toISOString().slice(0, 16)}
-            onChange={(e) => setTimestamp(new Date(e.target.value))} 
-          />
-          <Button type="submit" variant="contained">Add Pin</Button>
-        </form>
-      </Box>
+      <Card>
+        <CardContent>
+          <Box>
+            <Typography variant="h5" gutterBottom>Add New Pin</Typography>
+            <form onSubmit={handleAddPin}>
+              <TextField
+                label="Latitude"
+                fullWidth
+                value={latitude}
+                onChange={(e) => setLatitude(e.target.value)}
+                margin="normal"
+              />
+              <TextField
+                label="Longitude"
+                fullWidth
+                value={longitude}
+                onChange={(e) => setLongitude(e.target.value)}
+                margin="normal"
+              />
+              <FormControl fullWidth margin="normal">
+                <InputLabel>Dog</InputLabel>
+                <Select
+                  value={dogID}
+                  onChange={(e) => setDogID(e.target.value)}
+                >
+                  {dogNames.map(([id, name]) => (
+                    <MenuItem key={id} value={id}>{name}</MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+              <FormControl fullWidth margin="normal">
+                <InputLabel>Event</InputLabel>
+                <Select
+                  value={event}
+                  onChange={(e) => setEvent(e.target.value)}
+                >
+                  <MenuItem value="Restroom">Restroom</MenuItem>
+                  <MenuItem value="Meal">Meal</MenuItem>
+                  <MenuItem value="Exercise">Exercise</MenuItem>
+                </Select>
+              </FormControl>
+              <TextField 
+                label="Title" 
+                fullWidth 
+                value={title} 
+                onChange={(e) => setTitle(e.target.value)} 
+                margin="normal"
+              />
+              <TextField 
+                label="Description" 
+                fullWidth 
+                value={description} 
+                onChange={(e) => setDescription(e.target.value)} 
+                margin="normal"
+              />
+              <TextField 
+                label="Timestamp" 
+                type="datetime-local" 
+                fullWidth 
+                value={timestamp.toISOString().slice(0, 16)}
+                onChange={(e) => setTimestamp(new Date(e.target.value))} 
+                margin="normal"
+              />
+              <Button type="submit" variant="contained" color="primary" fullWidth sx={{ mt: 2 }}>Add Pin</Button>
+            </form>
+          </Box>
+        </CardContent>
+      </Card>
     </Container>
   );
 };
