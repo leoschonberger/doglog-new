@@ -3,10 +3,9 @@
 
 import React, { useState, useEffect } from 'react';
 import { TextField, Button, Box, Typography, Container, Select, MenuItem, InputLabel, FormControl, Card, CardContent } from '@mui/material';
-import { db } from '../config/firebase';
-import { collection, addDoc, Timestamp } from 'firebase/firestore';
 import { useAuth } from '../components/AuthContext';
 import { fetchDogs } from '../services/dogService';
+import { addPin } from '../services/pinService';
 
 const AddPin = ({ clickedLocation, onPinAdded }) => {
   const { user } = useAuth();
@@ -52,10 +51,10 @@ const AddPin = ({ clickedLocation, onPinAdded }) => {
       title,
       description,
       userId: user.uid,
-      timestamp: Timestamp.fromDate(new Date(timestamp)),  
+      timestamp: new Date(timestamp),  
     };
     try {
-      await addDoc(collection(db, 'pins'), newPin);
+      await addPin(newPin);
       console.log('Pin added successfully');
       // Optionally, reset the form fields
       setLatitude('');
