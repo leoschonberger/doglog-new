@@ -6,8 +6,7 @@ import { TextField, Button, Box, Typography, Container, Select, MenuItem, InputL
 import { db } from '../config/firebase';
 import { collection, addDoc, Timestamp } from 'firebase/firestore';
 import { useAuth } from '../components/AuthContext';
-import { addPin, fetchPins } from '../services/pinService'
-import { fetchDogs } from '../services/dogService'
+import { fetchDogs } from '../services/dogService';
 
 const AddPin = ({ clickedLocation, onPinAdded }) => {
   const { user } = useAuth();
@@ -19,8 +18,8 @@ const AddPin = ({ clickedLocation, onPinAdded }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');  
   const [timestamp, setTimestamp] = useState(new Date());
-  const [pins, setPins] = useState([]);
 
+  // Set latitude and longitude when clickedLocation changes
   useEffect(() => {
     if (clickedLocation) {
       setLatitude(clickedLocation.lat);
@@ -28,34 +27,7 @@ const AddPin = ({ clickedLocation, onPinAdded }) => {
     }
   }, [clickedLocation]);
 
-  useEffect(() => {
-    const loadPins = async () => {
-      try {
-        const pinsData = await fetchPins(user.uid);
-        console.log('Fetched pins:', pinsData);
-        if (Array.isArray(pinsData)) {
-          const validPins = pinsData
-            .filter((pin) => pin.latitude && pin.longitude)
-            .map((pin) => ({
-              id: pin.id,
-              title: pin.title || "Untitled Pin",
-              latitude: pin.latitude,
-              longitude: pin.longitude,
-              description: pin.description || "",
-            }));
-          setPins(validPins);
-        } else {
-          console.error("Invalid pins data format");
-        }
-      } catch (error) {
-        console.error("Error fetching pins:", error);
-      }
-    };
-    loadPins();
-  }, [user]);
-
-  // Function that will grab the dog names from our database
-  // once user opens "dog" input field
+  // Fetch dog names when the component mounts
   useEffect(() => {
     const loadDogNames = async () => {
       try {
@@ -69,6 +41,7 @@ const AddPin = ({ clickedLocation, onPinAdded }) => {
     loadDogNames();
   }, [user]);
 
+  // Handle form submission to add a new pin
   const handleAddPin = async (e) => {
     e.preventDefault();
     const newPin = {
@@ -80,9 +53,9 @@ const AddPin = ({ clickedLocation, onPinAdded }) => {
       description,
       userId: user.uid,
       timestamp: Timestamp.fromDate(new Date(timestamp)),  
-    }
+    };
     try {
-      await addPin(newPin);
+      await addDoc(collection(db, 'pins'), newPin);
       console.log('Pin added successfully');
       // Optionally, reset the form fields
       setLatitude('');
@@ -92,7 +65,6 @@ const AddPin = ({ clickedLocation, onPinAdded }) => {
       setTitle('');
       setTimestamp(new Date());
       setDescription('');
-      // Refresh the pins on the map
       onPinAdded();
     } catch (error) {
       console.error('Error adding pin:', error);
@@ -104,15 +76,17 @@ const AddPin = ({ clickedLocation, onPinAdded }) => {
       <Box>
         <Typography variant="h5">Add New Pin</Typography>
         <form onSubmit={handleAddPin}>
-          <TextField 
-            label="Latitude" 
-            fullWidth value={latitude} 
-            onChange={(e) => setLatitude(e.target.value)} 
+          <TextField
+            label="Latitude"
+            fullWidth
+            value={latitude}
+            onChange={(e) => setLatitude(e.target.value)}
           />
-          <TextField 
-            label="Longitude" 
-            fullWidth value={longitude} 
-            onChange={(e) => setLongitude(e.target.value)} 
+          <TextField
+            label="Longitude"
+            fullWidth
+            value={longitude}
+            onChange={(e) => setLongitude(e.target.value)}
           />
           <FormControl fullWidth>
             <InputLabel>Dog</InputLabel>
@@ -147,9 +121,11 @@ const AddPin = ({ clickedLocation, onPinAdded }) => {
             onChange={(e) => setDescription(e.target.value)} 
           />
           <TextField 
-            label="" 
+            label="Timestamp" 
             type="datetime-local" 
-            fullWidth onChange={(e) => setTimestamp(new Date(e.target.value))} 
+            fullWidth 
+            value={timestamp.toISOString().slice(0, 16)}
+            onChange={(e) => setTimestamp(new Date(e.target.value))} 
           />
           <Button type="submit" variant="contained">Add Pin</Button>
         </form>
