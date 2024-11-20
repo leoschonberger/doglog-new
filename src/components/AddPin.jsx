@@ -70,6 +70,16 @@ const AddPin = ({ clickedLocation, onPinAdded }) => {
     }
   };
 
+  const formatDateTimeLocal = (date) => {
+    const pad = (num) => num.toString().padStart(2, '0');
+    const year = date.getFullYear();
+    const month = pad(date.getMonth() + 1);
+    const day = pad(date.getDate());
+    const hours = pad(date.getHours());
+    const minutes = pad(date.getMinutes());
+    return `${year}-${month}-${day}T${hours}:${minutes}`;
+  };
+
   return (
     <Container maxWidth="sm">
       <Card>
@@ -131,7 +141,7 @@ const AddPin = ({ clickedLocation, onPinAdded }) => {
                 label="Timestamp" 
                 type="datetime-local" 
                 fullWidth 
-                value={timestamp.toISOString().slice(0, 16)}
+                value={formatDateTimeLocal(timestamp)}
                 onChange={(e) => setTimestamp(new Date(e.target.value))} 
                 margin="normal"
               />

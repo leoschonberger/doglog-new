@@ -23,7 +23,6 @@ const LocationMarker = ({ position }) => {
 
   useEffect(() => {
     if (position) {
-      // Set the map view to the user's location with a zoom level of 13
       map.setView(position, 13);
     }
   }, [map, position]);
@@ -44,12 +43,10 @@ const Map = ({ pins, onMapClick, onPinAdded }) => {
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(
       (position) => {
-        // Set the user's location to the fetched coordinates
         setUserLocation([position.coords.latitude, position.coords.longitude]);
       },
       (error) => {
         console.error('Error fetching location:', error);
-        // Default to Eugene, OR if location access is denied
         setUserLocation([44.042265, -123.074378]);
       }
     );
@@ -57,9 +54,7 @@ const Map = ({ pins, onMapClick, onPinAdded }) => {
 
   // Handle map click event
   const handleMapClick = (e) => {
-    // Set the clicked location to the coordinates of the click event
     setClickedLocation(e.latlng);
-    // Call the onMapClick prop if provided
     if (onMapClick) {
       onMapClick(e.latlng);
     }
@@ -68,7 +63,7 @@ const Map = ({ pins, onMapClick, onPinAdded }) => {
   // Component to handle map events
   const MapClickHandler = () => {
     useMapEvents({
-      click: handleMapClick, // Call handleMapClick on map click
+      click: handleMapClick,
     });
     return null;
   };
@@ -76,7 +71,7 @@ const Map = ({ pins, onMapClick, onPinAdded }) => {
   return (
     <Container maxWidth="md" sx={{ mt: 4 }}>
       <MapContainer
-        center={userLocation || [44.042265, -123.074378]} // Default center if location is not set
+        center={userLocation || [44.042265, -123.074378]}
         zoom={13}
         style={{ height: '500px', width: '100%' }}
       >
@@ -85,13 +80,9 @@ const Map = ({ pins, onMapClick, onPinAdded }) => {
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         />
         
-        {/* Display user's current location */}
         <LocationMarker position={userLocation} />
-
-        {/* Handle map clicks */}
         <MapClickHandler />
 
-        {/* Display pins as markers */}
         {pins.map((pin) => (
           <Marker
             key={pin.id}
@@ -106,7 +97,6 @@ const Map = ({ pins, onMapClick, onPinAdded }) => {
           </Marker>
         ))}
 
-        {/* Display popup form at clicked location */}
         {clickedLocation && (
           <Marker position={clickedLocation} icon={pinIcon}>
             <Popup>
@@ -114,7 +104,7 @@ const Map = ({ pins, onMapClick, onPinAdded }) => {
                 clickedLocation={clickedLocation}
                 onPinAdded={() => {
                   onPinAdded();
-                  setClickedLocation(null); // Close the popup after adding the pin
+                  setClickedLocation(null);
                 }}
               />
             </Popup>
