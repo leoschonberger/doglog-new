@@ -27,7 +27,7 @@ From front to back:
     - `config/` contains the Firebase configuration
     - `pages/` contains the pages of the app
     - `services/` contains the abstracted services that interact with Firebase
-- `App.jsx` is the main component
+- `public/` contains image assets and favicons
 
 #### Files to not touch
 - `dist/` contains the build files (build with `npm run build`)

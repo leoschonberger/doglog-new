@@ -72,5 +72,10 @@ package-lock.json
 # dataconnect generated files
 .dataconnect
 
+# Build Files
+dist/
+
+# Our config files
 config/
 firebase.jsx
+
