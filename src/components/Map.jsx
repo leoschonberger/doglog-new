@@ -1,11 +1,11 @@
 // Map.js
 import React, { useEffect, useState } from 'react';
-import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, useMap, useMapEvents } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import { Container } from '@mui/material';
-import { fetchPins } from '../services/pinService'; // Import the fetchPins function
 import { useAuth } from '../components/AuthContext';
+import AddPin from './AddPin';
 
 // Custom icon for pins
 const pinIcon = new L.Icon({
@@ -23,7 +23,7 @@ const LocationMarker = ({ position }) => {
 
   useEffect(() => {
     if (position) {
-      map.setView(position, 13); // Zoom level of 13 for close-up view
+      map.setView(position, 13);
     }
   }, [map, position]);
 
@@ -34,11 +34,12 @@ const LocationMarker = ({ position }) => {
   ) : null;
 };
 
-const Map = ({ pins, onMapClick }) => {
+const Map = ({ pins, onMapClick, onPinAdded }) => {
   const { user } = useAuth();
   const [userLocation, setUserLocation] = useState(null);
+  const [clickedLocation, setClickedLocation] = useState(null);
 
-  // Fetch user location
+  // Fetch user location when the component mounts
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(
       (position) => {
@@ -46,28 +47,42 @@ const Map = ({ pins, onMapClick }) => {
       },
       (error) => {
         console.error('Error fetching location:', error);
-        setUserLocation([44.042265, -123.074378]); // Default to London if location access denied
+        setUserLocation([44.042265, -123.074378]);
       }
     );
   }, []);
 
+  // Handle map click event
+  const handleMapClick = (e) => {
+    setClickedLocation(e.latlng);
+    if (onMapClick) {
+      onMapClick(e.latlng);
+    }
+  };
+
+  // Component to handle map events
+  const MapClickHandler = () => {
+    useMapEvents({
+      click: handleMapClick,
+    });
+    return null;
+  };
+
   return (
     <Container maxWidth="md" sx={{ mt: 4 }}>
       <MapContainer
-        center={userLocation || [44.042265, -123.074378]} // Default center if location is not set
+        center={userLocation || [44.042265, -123.074378]}
         zoom={13}
         style={{ height: '500px', width: '100%' }}
-        onClick={(e) => onMapClick(e.latlng)}
       >
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         />
         
-        {/* Display user's current location */}
         <LocationMarker position={userLocation} />
+        <MapClickHandler />
 
-        {/* Display pins as markers */}
         {pins.map((pin) => (
           <Marker
             key={pin.id}
@@ -81,7 +96,20 @@ const Map = ({ pins, onMapClick }) => {
             </Popup>
           </Marker>
         ))}
-        
+
+        {clickedLocation && (
+          <Marker position={clickedLocation} icon={pinIcon}>
+            <Popup>
+              <AddPin
+                clickedLocation={clickedLocation}
+                onPinAdded={() => {
+                  onPinAdded();
+                  setClickedLocation(null);
+                }}
+              />
+            </Popup>
+          </Marker>
+        )}
       </MapContainer>
     </Container>
   );
