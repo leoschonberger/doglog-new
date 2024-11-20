@@ -32,7 +32,6 @@ const AddPin = ({ clickedLocation, onPinAdded }) => {
       try {
         const names = await fetchDogs(user.uid);
         setDogNames(names);
-        console.log('Fetched dog names:', names);
       } catch (error) {
         console.error('Error fetching dog names', error); 
       }
