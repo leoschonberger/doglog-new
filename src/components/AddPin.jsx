@@ -8,12 +8,16 @@ import { fetchDogs } from '../services/dogService';
 import { addPin } from '../services/pinService';
 
 const AddPin = ({ clickedLocation, onPinAdded }) => {
+  // General
   const { user } = useAuth();
+  const [dogNames, setDogNames] = useState([]);
+
+  // For pin usage
   const [latitude, setLatitude] = useState('');
   const [longitude, setLongitude] = useState('');
   const [event, setEvent] = useState('');
   const [dogID, setDogID] = useState('');
-  const [dogNames, setDogNames] = useState([]);
+  const [dogName, setDogName] = useState('');
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');  
   const [timestamp, setTimestamp] = useState(new Date());
@@ -46,6 +50,7 @@ const AddPin = ({ clickedLocation, onPinAdded }) => {
       latitude: parseFloat(latitude),
       longitude: parseFloat(longitude),
       dogID,
+      dogName,
       event,
       title,
       description,
@@ -104,7 +109,11 @@ const AddPin = ({ clickedLocation, onPinAdded }) => {
                 <InputLabel>Dog</InputLabel>
                 <Select
                   value={dogID}
-                  onChange={(e) => setDogID(e.target.value)}
+                  onChange={(e) => {
+                    const selectedDog = dogNames.find(dog => dog[0] === e.target.value);
+                    setDogID(e.target.value);
+                    setDogName(selectedDog ? selectedDog[1] : '');
+                  }}
                 >
                   {dogNames.map(([id, name]) => (
                     <MenuItem key={id} value={id}>{name}</MenuItem>
