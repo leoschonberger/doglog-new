@@ -1,13 +1,13 @@
-// AddPin.js
+// PinInputForm.jsx
 // Form component that allows users to add pins with location, title, and timestamp
 
 import React, { useState, useEffect } from 'react';
 import { TextField, Button, Box, Typography, Container, Select, MenuItem, InputLabel, FormControl, Card, CardContent } from '@mui/material';
-import { useAuth } from '../components/AuthContext';
+import { useAuth } from './AuthContext';
 import { fetchDogs } from '../services/dogService';
-import { addPin } from '../services/pinService';
+import { pinInputForm } from '../services/pinService';
 
-const AddPin = ({ clickedLocation, onPinAdded }) => {
+const PinInputForm = ({ clickedLocation, onPinAdded }) => {
   // General
   const { user } = useAuth();
   const [dogNames, setDogNames] = useState([]);
@@ -61,7 +61,7 @@ const AddPin = ({ clickedLocation, onPinAdded }) => {
       timestamp: new Date(timestamp),  
     };
     try {
-      await addPin(newPin);
+      await pinInputForm(newPin);
       console.log('Pin added successfully');
       // Optionally, reset the form fields
       setLatitude('');
@@ -165,4 +165,4 @@ const AddPin = ({ clickedLocation, onPinAdded }) => {
   );
 };
 
-export default AddPin;
+export default PinInputForm;

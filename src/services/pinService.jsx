@@ -11,7 +11,7 @@ export const fetchPins = async (userId) => {
   return querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
 };
 
-export const addPin = async (pin) => {
+export const pinInputForm = async (pin) => {
   await addDoc(collection(db, 'pins'), pin);
 }
 
