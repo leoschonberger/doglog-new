@@ -1,146 +1,207 @@
 // UpdatePin.jsx
 // Form component that allows users to update existing pins
 
-import { db } from '../config/firebase';
 import React, { useState, useEffect } from 'react';
+import { fetchDogs } from '../services/dogService';
+import { updatePin } from '../services/pinService';
 import { useAuth } from '../components/AuthContext';
-import { TextField, Button, Box, Typography, Container } from '@mui/material';
-import { collection, query, where, getDocs, doc, updateDoc } from 'firebase/firestore';
+import UpdateIcon from '@mui/icons-material/Update';
+import { db, getDoc, doc } from '../config/firebase';
+import { TextField, FormControl, InputLabel, Select, MenuItem, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 
-const UpdatePin = ({ onPinUpdated }) => {
+const UpdatePin = ({ pinId, onPinUpdated }) => {
     // Authenticate user
     const { user } = useAuth();
 
-    // State to hold the latitude, longitude, title, timestamp, and original title of the pin
+    // For dog selection
+    const [dogNames, setDogNames] = useState([]);
+    const [open, setOpen] = useState(false);
+
+    // For pin usage
     const [latitude, setLatitude] = useState('');
     const [longitude, setLongitude] = useState('');
+    const [event, setEvent] = useState('');
+    const [dogID, setDogID] = useState('');
+    const [dogName, setDogName] = useState('');
     const [title, setTitle] = useState('');
+    const [description, setDescription] = useState('');  
     const [timestamp, setTimestamp] = useState(new Date());
-    const [originalTitle, setOriginalTitle] = useState('');
 
-    // Effect to load the pin data when the original title changes
+    // Effect to load the dog names when the user changes
+    useEffect(() => {
+        const loadDogNames = async () => {
+            try {
+                const names = await fetchDogs(user.uid);
+                setDogNames(names);
+            } catch (error) {
+                console.error('Error fetching dog names:', error);
+            }
+        };
+
+        if (user) {
+            loadDogNames();
+        }
+    }, [user]);
+
+    // Effect to load the pin data when the pinId changes
     useEffect(() => {
         const loadPin = async () => {
             try {
-                // Query the pins collection for the pin with the user's ID and the original title
-                const pinsRef = collection(db, 'pins');
-                const q = query(pinsRef, where('userId', '==', user.uid), where('title', '==', originalTitle));
-                const querySnapshot = await getDocs(q);
+                // Query the pins collection for the pin with the given pinId
+                const pinRef = doc(db, 'pins', pinId);
+                const pinDoc = await getDoc(pinRef);
 
                 // If the pin is found, set the state with the pin data
-                if (!querySnapshot.empty) {
-                    const pinDoc = querySnapshot.docs[0];
+                if (pinDoc.exists()) {
                     const pinData = pinDoc.data();
                     setLatitude(pinData.latitude);
                     setLongitude(pinData.longitude);
+                    setEvent(pinData.event);
+                    setDogID(pinData.dogID);
                     setTitle(pinData.title);
+                    setDescription(pinData.description);
                     setTimestamp(pinData.timestamp.toDate());
-
                 } else {
                     console.error('Pin not found');
                 }
-
             } catch (error) {
                 console.error('Error fetching pin:', error);
             }
         };
 
-        if (user && originalTitle) {
+        if (user && pinId) {
             loadPin();
         }
-    }, [originalTitle, user]);
+    }, [pinId, user]);
 
-    // Function to clear the input fields
-    const clearInputs = () => {
-        setLatitude('');
-        setLongitude('');
-        setTitle('');
-        setTimestamp(new Date());
-        setOriginalTitle('');
+    // Function to open the dialog
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+
+    // Function to close the dialog
+    const handleClose = () => {
+        setOpen(false);
+    };
+
+    // Function to format the date and time for the input field
+    const formatDateTimeLocal = (date) => {
+        const pad = (num) => num.toString().padStart(2, '0');
+        const year = date.getFullYear();
+        const month = pad(date.getMonth() + 1);
+        const day = pad(date.getDate());
+        const hours = pad(date.getHours());
+        const minutes = pad(date.getMinutes());
+        return `${year}-${month}-${day}T${hours}:${minutes}`;
     };
 
     // Function to handle the update of the pin
     const handleUpdatePin = async (e) => {
         e.preventDefault();
         try {
-            // Query the pins collection for the pin with the user's ID and the original title
-            const pinsRef = collection(db, 'pins');
-            const q = query(pinsRef, where('userId', '==', user.uid), where('title', '==', originalTitle));
-            const querySnapshot = await getDocs(q);
+            // Reference the pin document directly using the pinId
+            const updatedPin = {};
 
-            // If the pin is found, update the pin with the new data
-            if (!querySnapshot.empty) {
-                const pinDoc = querySnapshot.docs[0];
-                const pinRef = doc(db, 'pins', pinDoc.id);
-                const updatedPin = {};
+            if (latitude) updatedPin.latitude = parseFloat(latitude);
+            if (longitude) updatedPin.longitude = parseFloat(longitude);
+            if (event) updatedPin.event = event;
+            if (title) updatedPin.title = title;
+            if (description) updatedPin.description = description;
+            if (timestamp) updatedPin.timestamp = timestamp;
+            if (dogID) updatedPin.dogID = dogID;
 
-                if (latitude) updatedPin.latitude = parseFloat(latitude);
-                if (longitude) updatedPin.longitude = parseFloat(longitude);
-                if (title) updatedPin.title = title;
-                if (timestamp) updatedPin.timestamp = timestamp;
-
-                await updateDoc(pinRef, updatedPin);
-                console.log('Pin updated successfully');
-                onPinUpdated();
-
-            } else {
-                console.error('Pin not found');
-            }
+            await updatePin(user.id, pinId, updatedPin);
+            console.log('Pin updated successfully');
+            onPinUpdated();
+            handleClose();
 
         } catch (error) {
             console.error('Error updating pin:', error);
-
-        } finally {
-            clearInputs();
         }
     };
 
-    // Temp for testing on map page
     return (
-        <Container maxWidth="sm">
-            <Box>
-                <Typography variant="h5">Update Pin</Typography>
-                <TextField
-                    label="Original Title"
-                    fullWidth
-                    value={originalTitle}
-                    onChange={(e) => setOriginalTitle(e.target.value)}
-                    margin="normal"
-                />
-                <form onSubmit={handleUpdatePin}>
+        <div>
+            <Button onClick={handleClickOpen} variant="contained" color="black" size="small">
+                <UpdateIcon />
+            </Button>
+            <Dialog open={open} onClose={handleClose}>
+                <DialogTitle>Update Pin</DialogTitle>
+                <DialogContent>
                     <TextField 
                         label="Latitude" 
                         fullWidth 
                         value={latitude} 
-                        onChange={(e) => setLatitude(e.target.value)} 
-                        sx={{ mb: 1 }} 
+                        onChange={(e) => setLatitude(e.target.value)}
+                        margin="normal"
                     />
                     <TextField 
                         label="Longitude" 
                         fullWidth 
                         value={longitude} 
-                        onChange={(e) => setLongitude(e.target.value)} 
-                        sx={{ mb: 1 }} 
+                        onChange={(e) => setLongitude(e.target.value)}
+                        margin="normal"
                     />
+                    <FormControl fullWidth margin="normal" variant="outlined">
+                        <InputLabel>Dog</InputLabel>
+                        <Select
+                            label="Dog"
+                            value={dogID}
+                            onChange={(e) => {
+                                const selectedDog = dogNames.find(dog => dog[0] === e.target.value);
+                                setDogID(e.target.value);
+                                setDogName(selectedDog ? selectedDog[1] : '');
+                            }}
+                        >
+                            {dogNames.map(([id, name]) => (
+                                <MenuItem key={id} value={id}>{name}</MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
+                    <FormControl fullWidth margin="normal" variant="outlined">
+                        <InputLabel>Event</InputLabel>
+                        <Select
+                            label="Event"
+                            value={event}
+                            onChange={(e) => setEvent(e.target.value)}
+                        >
+                            <MenuItem value="Restroom">Restroom</MenuItem>
+                            <MenuItem value="Meal">Meal</MenuItem>
+                            <MenuItem value="Exercise">Exercise</MenuItem>
+                        </Select>
+                    </FormControl>
                     <TextField 
                         label="Title" 
                         fullWidth 
                         value={title} 
                         onChange={(e) => setTitle(e.target.value)} 
-                        sx={{ mb: 1 }} 
+                        margin="normal" 
+                    />
+                    <TextField 
+                        label="Description" 
+                        fullWidth 
+                        value={description} 
+                        onChange={(e) => setDescription(e.target.value)} 
+                        margin="normal"
                     />
                     <TextField 
                         label="Timestamp" 
                         type="datetime-local" 
                         fullWidth 
-                        value={timestamp} 
+                        value={formatDateTimeLocal(timestamp)}
                         onChange={(e) => setTimestamp(new Date(e.target.value))} 
-                        sx={{ mb: 1 }} 
+                        margin="normal"
                     />
-                    <Button type="submit" variant="contained">Update Pin</Button>
-                </form>
-            </Box>
-        </Container>
+                    <DialogContentText margin="normal">
+                        Are you sure you want to update? This action cannot be undone.
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClose}>Cancel</Button>
+                    <Button onClick={handleUpdatePin} variant="contained">Update Pin</Button>
+                </DialogActions>
+            </Dialog>
+        </div>
     );
 };
 

@@ -4,6 +4,7 @@ import { useAuth } from '../components/AuthContext';
 import { fetchPins } from '../services/pinService';
 import { fetchDogs } from '../services/dogService';
 import { AlignCenter } from 'tabler-icons-react';
+import PinActionsDropdown from './PinsActionDropdown';
 
 const ActivityList = () => {
     
@@ -58,6 +59,14 @@ const ActivityList = () => {
       fetchData();
     }, [user]);
 
+    const handlePinRemoved = (pinId) => {
+      setPins(pins.filter(pin => pin.id !== pinId));
+    };
+  
+    const handlePinUpdated = async () => {
+      const updatedPins = await fetchPinsServer();
+      setPins(updatedPins);
+    };
     
     // If the user is not logged in, display a message
     // We can probably update this to be something more user-friendly
@@ -101,18 +110,23 @@ const ActivityList = () => {
                   <strong>Title: </strong> {pin.title}
                 </Typography>
                 <Typography variant="body1" style={{ marginTop: "10px" }}>
-                <strong>Desc: </strong> {pin.description}
+                  <strong>Desc: </strong> {pin.description}
                 </Typography>
                 <Typography variant="caption" style={{ marginTop: "10px", display: "block" }}>
                   Location: ({pin.latitude}, {pin.longitude})
                 </Typography>
+                <PinActionsDropdown 
+                  pinId={pin.id} 
+                  onPinRemoved={() => handlePinRemoved(pin.id)} 
+                  onPinUpdated={handlePinUpdated} 
+                />
               </CardContent>
             </Card>
           );
         })}
-          </Stack>
-        </div>
-    );
-  };
+      </Stack>
+    </div>
+  );
+};
   
   export default ActivityList;

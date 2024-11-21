@@ -1,54 +1,69 @@
 // RemovePin.jsx
 // Form component that allows users to remove pins by title
 
-import { removePin } from '../services/pinService';
+import { Button } from '@mui/material';
 import React, { useState } from 'react';
+import { removePin } from '../services/pinService';
 import { useAuth } from '../components/AuthContext';
-import { TextField, Button, Box, Typography, Container } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 
-const RemovePin = ({ onPinRemoved }) => {
+
+const RemovePin = ({ pinId, onPinRemoved }) => {
     // Authenticate user
     const { user } = useAuth();
+    const [open, setOpen] = useState(false);
 
-    // State to hold the title of the pin to be removed
-    const [title, setTitle] = useState('');
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
 
-    // Function to handle the removal of the pin
-    const handleRemovePin = async (e) => {
-        e.preventDefault();
+    const handleClose = () => {
+        setOpen(false);
+    };
 
+    const handleConfirmRemove = async () => {
+        handleClose();
+        await handleRemovePin();
+    };
+
+    // // Function to handle the removal of the pin
+    const handleRemovePin = async () => {
         try {
-            // Call the removePin service with the user's ID and the pin title
-            await removePin(user.uid, title);
+            // Call the removePin service with the user's ID and the pinId
+            await removePin(user.id, pinId);
             console.log('Pin removed successfully');
             onPinRemoved();
         
-        // Log the error and reset the title state
+        // Log the error
         } catch (error) {
             console.error('Error removing pin:', error);
-        
-        } finally {
-            setTitle('');
         }
     };
 
-    // Temp for testing on map page
     return (
-        <Container maxWidth="sm">
-            <Box>
-                <Typography variant="h5">Remove Pin</Typography>
-                <form onSubmit={handleRemovePin}>
-                    <TextField
-                        label="Title"
-                        fullWidth
-                        value={title}
-                        onChange={(e) => setTitle(e.target.value)}
-                        margin="normal"
-                    />
-                    <Button type="submit" variant="contained">Remove Pin</Button>
-                </form>
-            </Box>
-        </Container>
+        <div>
+            <Button onClick={handleClickOpen} variant="contained" color="black" size="small">
+                <DeleteIcon />
+            </Button>
+            <Dialog
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">{"Are you sure you want to delete this pin?"}</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText id="alert-dialog-description">
+                            This action cannot be undone.
+                        </DialogContentText>
+                    </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClose}>Cancel</Button>
+                    <Button onClick={handleConfirmRemove} variant="contained">Delete Pin</Button>
+                </DialogActions>
+            </Dialog>
+        </div>
     );
 };
 

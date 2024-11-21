@@ -15,21 +15,22 @@ export const addPin = async (pin) => {
   await addDoc(collection(db, 'pins'), pin);
 }
 
-export const removePin = async (userId, title) => {
-  const pinsRef = collection(db, 'pins');
-  const q = query(pinsRef, where('userId', '==', userId), where('title', '==', title));
-  const querySnapshot = await getDocs(q);
-
-  if (!querySnapshot.empty) {
-    const pinDoc = querySnapshot.docs[0];
-    await deleteDoc(doc(db, 'pins', pinDoc.id));
+export const removePin = async (userId, pinId) => {
+  if (userId === null) {
+    throw new Error('User Not Authenticated');
 
   } else {
-    throw new Error('Pin not found');
+    const pinRef = doc(db, 'pins', pinId);
+    await deleteDoc(pinRef);
   }
 };
 
-export const updatePin = async (pinId, pin) => {
-  const pinRef = doc(db, 'pins', pinId);
-  await updateDoc(pinRef, pin);
+export const updatePin = async (userId, pinId, pin) => {
+  if (userId === null) {
+    throw new Error('User Not Authenticated');
+
+  } else {
+    const pinRef = doc(db, 'pins', pinId);
+    await updateDoc(pinRef, pin);
+  }
 };

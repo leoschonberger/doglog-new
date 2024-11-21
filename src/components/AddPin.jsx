@@ -40,7 +40,10 @@ const AddPin = ({ clickedLocation, onPinAdded }) => {
         console.error('Error fetching dog names', error); 
       }
     };
-    loadDogNames();
+    
+    if (user) {
+      loadDogNames();
+    }
   }, [user]);
 
   // Handle form submission to add a new pin
