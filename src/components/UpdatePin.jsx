@@ -1,12 +1,13 @@
 // UpdatePin.jsx
 // Form component that allows users to update existing pins
 
+import { db } from '../config/firebase';
+import { getDoc, doc } from 'firebase/firestore';
 import React, { useState, useEffect } from 'react';
 import { fetchDogs } from '../services/dogService';
 import { updatePin } from '../services/pinService';
 import { useAuth } from '../components/AuthContext';
 import UpdateIcon from '@mui/icons-material/Update';
-import { db, getDoc, doc } from '../config/firebase';
 import { TextField, FormControl, InputLabel, Select, MenuItem, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 
 const UpdatePin = ({ pinId, onPinUpdated }) => {
