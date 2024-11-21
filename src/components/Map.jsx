@@ -100,7 +100,7 @@ const Map = ({ pins, onMapClick, onPinAdded }) => {
         {clickedLocation && (
           <Marker position={clickedLocation} icon={pinIcon}>
             <Popup>
-              <AddPin
+              <PinInputForm
                 clickedLocation={clickedLocation}
                 onPinAdded={() => {
                   onPinAdded();

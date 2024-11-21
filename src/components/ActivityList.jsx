@@ -59,10 +59,12 @@ const ActivityList = () => {
       fetchData();
     }, [user]);
 
+    // This function will update the pins state when a pin is removed
     const handlePinRemoved = (pinId) => {
       setPins(pins.filter(pin => pin.id !== pinId));
     };
   
+    // This function will update the pins state when a pin is updated by re-fetching the pins from the server
     const handlePinUpdated = async () => {
       const updatedPins = await fetchPinsServer();
       setPins(updatedPins);
@@ -102,10 +104,16 @@ const ActivityList = () => {
                   <Typography variant="h6">
                     {dog.name} - {pin.event}
                   </Typography>
-                  <Typography variant="caption">
+                  
+                  <PinActionsDropdown 
+                  pinId={pin.id} 
+                  onPinRemoved={() => handlePinRemoved(pin.id)} 
+                  onPinUpdated={handlePinUpdated} 
+                />
+                </Box>
+                <Typography variant="caption">
                     {formatTimestamp(pin.timestamp)}
                   </Typography>
-                </Box>
                 <Typography variant="body1" style={{ marginTop: "10px" }}>
                   <strong>Title: </strong> {pin.title}
                 </Typography>
@@ -115,11 +123,6 @@ const ActivityList = () => {
                 <Typography variant="caption" style={{ marginTop: "10px", display: "block" }}>
                   Location: ({pin.latitude}, {pin.longitude})
                 </Typography>
-                <PinActionsDropdown 
-                  pinId={pin.id} 
-                  onPinRemoved={() => handlePinRemoved(pin.id)} 
-                  onPinUpdated={handlePinUpdated} 
-                />
               </CardContent>
             </Card>
           );
