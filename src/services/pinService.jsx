@@ -2,7 +2,7 @@
 // Service functions for fetching user-specific pins from Firestore
 
 import { db } from '../config/firebase';
-import { collection, query, where, orderBy, getDocs, addDoc } from 'firebase/firestore';
+import { doc, collection, query, where, orderBy, getDocs, deleteDoc, updateDoc, addDoc } from 'firebase/firestore';
 
 export const fetchPins = async (userId) => {
   const pinsRef = collection(db, 'pins');
@@ -11,14 +11,26 @@ export const fetchPins = async (userId) => {
   return querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
 };
 
-export const addPin = async (pin) => {
+export const pinInputForm = async (pin) => {
   await addDoc(collection(db, 'pins'), pin);
 }
 
-export const deletePin = async (pinId) => {
-  await deleteDoc(doc(db, 'pins', pinId));
-}
+export const removePin = async (userId, pinId) => {
+  if (userId === null) {
+    throw new Error('User Not Authenticated');
 
-export const updatePin = async (pinId, pin) => {
-  await setDoc(doc(db, 'pins', pinId), pin);
-}
+  } else {
+    const pinRef = doc(db, 'pins', pinId);
+    await deleteDoc(pinRef);
+  }
+};
+
+export const updatePin = async (userId, pinId, pin) => {
+  if (userId === null) {
+    throw new Error('User Not Authenticated');
+
+  } else {
+    const pinRef = doc(db, 'pins', pinId);
+    await updateDoc(pinRef, pin);
+  }
+};

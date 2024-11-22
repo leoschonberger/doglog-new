@@ -4,6 +4,7 @@ import { useAuth } from '../components/AuthContext';
 import { fetchPins } from '../services/pinService';
 import { fetchDogs } from '../services/dogService';
 import { AlignCenter } from 'tabler-icons-react';
+import PinActionsDropdown from './PinsActionDropdown';
 
 const ActivityList = () => {
     
@@ -58,6 +59,16 @@ const ActivityList = () => {
       fetchData();
     }, [user]);
 
+    // This function will update the pins state when a pin is removed
+    const handlePinRemoved = (pinId) => {
+      setPins(pins.filter(pin => pin.id !== pinId));
+    };
+  
+    // This function will update the pins state when a pin is updated by re-fetching the pins from the server
+    const handlePinUpdated = async () => {
+      const updatedPins = await fetchPinsServer();
+      setPins(updatedPins);
+    };
     
     // If the user is not logged in, display a message
     // We can probably update this to be something more user-friendly
@@ -93,15 +104,21 @@ const ActivityList = () => {
                   <Typography variant="h6">
                     {dog.name} - {pin.event}
                   </Typography>
-                  <Typography variant="caption">
+                  
+                  <PinActionsDropdown 
+                  pinId={pin.id} 
+                  onPinRemoved={() => handlePinRemoved(pin.id)} 
+                  onPinUpdated={handlePinUpdated} 
+                />
+                </Box>
+                <Typography variant="caption">
                     {formatTimestamp(pin.timestamp)}
                   </Typography>
-                </Box>
                 <Typography variant="body1" style={{ marginTop: "10px" }}>
                   <strong>Title: </strong> {pin.title}
                 </Typography>
                 <Typography variant="body1" style={{ marginTop: "10px" }}>
-                <strong>Desc: </strong> {pin.description}
+                  <strong>Desc: </strong> {pin.description}
                 </Typography>
                 <Typography variant="caption" style={{ marginTop: "10px", display: "block" }}>
                   Location: ({pin.latitude}, {pin.longitude})
@@ -110,9 +127,9 @@ const ActivityList = () => {
             </Card>
           );
         })}
-          </Stack>
-        </div>
-    );
-  };
+      </Stack>
+    </div>
+  );
+};
   
   export default ActivityList;
