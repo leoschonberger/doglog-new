@@ -28,6 +28,9 @@ const UpdatePin = ({ pinId, onPinUpdated }) => {
     const [description, setDescription] = useState('');  
     const [timestamp, setTimestamp] = useState(new Date());
 
+    // Error handling
+    const [error, setError] = useState('');
+
     // Effect to load the dog names when the user changes
     useEffect(() => {
         const loadDogNames = async () => {
@@ -83,6 +86,7 @@ const UpdatePin = ({ pinId, onPinUpdated }) => {
     // Function to close the dialog
     const handleClose = () => {
         setOpen(false);
+        setError('');
     };
 
     // Function to format the date and time for the input field
@@ -99,6 +103,12 @@ const UpdatePin = ({ pinId, onPinUpdated }) => {
     // Function to handle the update of the pin
     const handleUpdatePin = async (e) => {
         e.preventDefault();
+
+        // Check if timestamp is not inputted. If so, Sets error message
+        if (!timestamp || !title || isNaN(new Date(timestamp).getTime())) {
+            setError('Required fields are missing');
+            return;
+        }
         try {
             // Reference the pin document directly using the pinId
             const updatedPin = {};
@@ -177,6 +187,8 @@ const UpdatePin = ({ pinId, onPinUpdated }) => {
                         value={title} 
                         onChange={(e) => setTitle(e.target.value)} 
                         margin="normal" 
+                        error={!title && !!error}  
+                        helperText={!title && error && 'Title is required'}
                     />
                     <TextField 
                         label="Description" 
@@ -189,13 +201,13 @@ const UpdatePin = ({ pinId, onPinUpdated }) => {
                         label="Timestamp" 
                         type="datetime-local" 
                         fullWidth 
-                        value={formatDateTimeLocal(timestamp)}
-                        onChange={(e) => setTimestamp(new Date(e.target.value))} 
+                        value={timestamp ? formatDateTimeLocal(timestamp) : ''}
+                        onChange={(e) => setTimestamp(e.target.value ? (new Date(e.target.value)) : '')} 
                         margin="normal"
+                        error = {!timestamp && !!error}
+                        helperText={!timestamp && error && 'Timestamp is required'}
+                        InputLabelProps={{ shrink: true }}
                     />
-                    <DialogContentText margin="normal">
-                        Are you sure you want to update? This action cannot be undone.
-                    </DialogContentText>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose}>Cancel</Button>

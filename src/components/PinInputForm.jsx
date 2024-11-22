@@ -2,7 +2,7 @@
 // Form component that allows users to add pins with location, title, and timestamp
 
 import React, { useState, useEffect } from 'react';
-import { TextField, Button, Box, Typography, Container, Select, MenuItem, InputLabel, FormControl, Card, CardContent } from '@mui/material';
+import { TextField, Button, Box, Typography, Container, Select, MenuItem, InputLabel, FormControl, Card, CardContent, FormHelperText} from '@mui/material';
 import { useAuth } from './AuthContext';
 import { fetchDogs } from '../services/dogService';
 import { pinInputForm } from '../services/pinService';
@@ -20,7 +20,10 @@ const PinInputForm = ({ clickedLocation, onPinAdded }) => {
   const [dogName, setDogName] = useState('');
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');  
-  const [timestamp, setTimestamp] = useState(new Date());
+  const [timestamp, setTimestamp] = useState('');
+
+  // For Error Checking
+  const [error, setError] = useState('');
 
   // Set latitude and longitude when clickedLocation changes
   useEffect(() => {
@@ -49,6 +52,10 @@ const PinInputForm = ({ clickedLocation, onPinAdded }) => {
   // Handle form submission to add a new pin
   const handleAddPin = async (e) => {
     e.preventDefault();
+    if (!dogID || !event || !title || !timestamp) {
+      setError('Please fill out all required fields');
+      return;
+    }
     const newPin = {
       latitude: parseFloat(latitude),
       longitude: parseFloat(longitude),
@@ -69,8 +76,9 @@ const PinInputForm = ({ clickedLocation, onPinAdded }) => {
       setDogID('');
       setEvent('');
       setTitle('');
-      setTimestamp(new Date());
+      setTimestamp('');
       setDescription('');
+      setError('');
       onPinAdded();
     } catch (error) {
       console.error('Error adding pin:', error);
@@ -93,6 +101,9 @@ const PinInputForm = ({ clickedLocation, onPinAdded }) => {
         <CardContent>
           <Box>
             <Typography variant="h5" gutterBottom>Add New Pin</Typography>
+            <Typography variant="body2" color="textSecondary" gutterBottom>
+                * = Required Field 
+            </Typography>
             <form onSubmit={handleAddPin}>
               <TextField
                 label="Latitude"
@@ -108,8 +119,8 @@ const PinInputForm = ({ clickedLocation, onPinAdded }) => {
                 onChange={(e) => setLongitude(e.target.value)}
                 margin="normal"
               />
-              <FormControl fullWidth margin="normal">
-                <InputLabel>Dog</InputLabel>
+              <FormControl fullWidth margin="normal" error={!dogID && !!error}>
+                <InputLabel>Dog*</InputLabel>
                 <Select
                   value={dogID}
                   onChange={(e) => {
@@ -122,9 +133,10 @@ const PinInputForm = ({ clickedLocation, onPinAdded }) => {
                     <MenuItem key={id} value={id}>{name}</MenuItem>
                   ))}
                 </Select>
+                <FormHelperText>{!dogID && error && 'Dog is required'}</FormHelperText>
               </FormControl>
-              <FormControl fullWidth margin="normal">
-                <InputLabel>Event</InputLabel>
+              <FormControl fullWidth margin="normal" error={!event && !!error}>
+                <InputLabel>Event*</InputLabel>
                 <Select
                   value={event}
                   onChange={(e) => setEvent(e.target.value)}
@@ -133,13 +145,16 @@ const PinInputForm = ({ clickedLocation, onPinAdded }) => {
                   <MenuItem value="Meal">Meal</MenuItem>
                   <MenuItem value="Exercise">Exercise</MenuItem>
                 </Select>
+                <FormHelperText>{!event && error && 'Event is required'}</FormHelperText>
               </FormControl>
-              <TextField 
-                label="Title" 
-                fullWidth 
-                value={title} 
-                onChange={(e) => setTitle(e.target.value)} 
+              <TextField
+                label="Title*"
+                fullWidth
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
                 margin="normal"
+                error={!title && !!error}
+                helperText={!title && error && 'Title is required'}
               />
               <TextField 
                 label="Description" 
@@ -149,12 +164,17 @@ const PinInputForm = ({ clickedLocation, onPinAdded }) => {
                 margin="normal"
               />
               <TextField 
-                label="Timestamp" 
+                label="Timestamp*"
                 type="datetime-local" 
                 fullWidth 
-                value={formatDateTimeLocal(timestamp)}
-                onChange={(e) => setTimestamp(new Date(e.target.value))} 
+                // making value correct local time if inputted, else keep field blank
+                value={timestamp ? formatDateTimeLocal(new Date(timestamp)) : ''}
+                onChange={(e) => setTimestamp(e.target.value)} 
                 margin="normal"
+                error = {!timestamp && !!error}
+                helperText = {!timestamp && error && 'Timestamp is required'}
+                // Keeps "Timestamp*" label at top of input field, rather than overlapping mm:dd:yyyy
+                InputLabelProps={{ shrink: true }}
               />
               <Button type="submit" variant="contained" color="primary" fullWidth sx={{ mt: 2 }}>Add Pin</Button>
             </form>
