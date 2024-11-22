@@ -5,7 +5,7 @@ import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import { Container } from '@mui/material';
 import { useAuth } from '../components/AuthContext';
-import AddPin from './AddPin';
+import PinInputForm from './PinInputForm';
 
 // Custom icon for pins
 const pinIcon = new L.Icon({
@@ -100,7 +100,7 @@ const Map = ({ pins, onMapClick, onPinAdded }) => {
         {clickedLocation && (
           <Marker position={clickedLocation} icon={pinIcon}>
             <Popup>
-              <AddPin
+              <PinInputForm
                 clickedLocation={clickedLocation}
                 onPinAdded={() => {
                   onPinAdded();
