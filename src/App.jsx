@@ -8,6 +8,7 @@ import MapPage from './pages/MapPage';
 import Login from './components/Login';
 import ActivityPage from './pages/ActivityPage';
 import { AuthProvider } from './components/AuthContext';
+import AchievementPage from './components/AchievementPage';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
           <Route path="/" element={<Login />} />
           <Route path="/map" element={<MapPage />} />
           <Route path="/activity" element={<ActivityPage />} />
+          <Route path="/ach" element={<AchievementPage />} />
         </Routes>
       </Router>
     </AuthProvider>
