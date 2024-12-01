@@ -37,10 +37,10 @@ const UpdateDog = ({ dogId, onDogUpdated }) => {
                 // If the dog is found, set the state with the dog data
                 if (dogDoc.exists()) {
                     const dogData = dogDoc.data();
-                    setName(dogData.name);
-                    setAge(dogData.age);
-                    setBreed(dogData.breed);
-                    setGender(dogData.gender);
+                    setName(dogData.Name);
+                    setAge(dogData.Age);
+                    setBreed(dogData.Breed);
+                    setGender(dogData.Gender);
                     setTimestamp(dogData.timestamp.toDate());
                 } else {
                     console.error('Dog not found');
@@ -90,10 +90,10 @@ const UpdateDog = ({ dogId, onDogUpdated }) => {
             // Reference the pin document directly using the pinId
             const updatedDog = {};
 
-            if (name) updatedDog.name = name
-            if (age) updatedDog.age = age;
-            if (breed) updatedDog.breed = breed;
-            if (gender) updatedDog.gender = gender;
+            if (name) updatedDog.Name = name
+            if (age) updatedDog.Age = age;
+            if (breed) updatedDog.Breed = breed;
+            if (gender) updatedDog.Gender = gender;
             if (timestamp) updatedDog.timestamp = timestamp;
 
             await updateDog(user.id, dogId, updatedDog);

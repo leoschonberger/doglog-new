@@ -55,7 +55,7 @@ const RemoveDog = ({ dogId, onDogRemoved }) => {
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
             >
-                <DialogTitle id="alert-dialog-title">{"Are you sure you want to delete this pin?"}</DialogTitle>
+                <DialogTitle id="alert-dialog-title">{"Are you sure you want to delete this dog?"}</DialogTitle>
                     <DialogContent>
                         <DialogContentText id="alert-dialog-description">
                             This action cannot be undone.
@@ -63,7 +63,7 @@ const RemoveDog = ({ dogId, onDogRemoved }) => {
                     </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose}>Cancel</Button>
-                    <Button onClick={handleConfirmRemove} variant="contained">Delete Pin</Button>
+                    <Button onClick={handleConfirmRemove} variant="contained">Delete Dog</Button>
                 </DialogActions>
             </Dialog>
         </div>

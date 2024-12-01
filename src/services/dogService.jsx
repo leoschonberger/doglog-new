@@ -2,7 +2,7 @@
 // Service functions for fetching dog specific information from Firestore
 
 import { db } from '../config/firebase';
-import { collection, query, where, orderBy, getDocs, addDoc, doc, getDoc, updateDoc } from 'firebase/firestore';
+import { collection, query, where, orderBy, getDocs, addDoc, doc, getDoc, updateDoc, deleteDoc } from 'firebase/firestore';
 
 export const fetchDogs = async (userId) => {
   // Function to return tuple of (ID, name) of the dogs that belong to a specific user (userID)
