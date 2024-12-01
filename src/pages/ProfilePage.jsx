@@ -1,14 +1,49 @@
 // ProfilePage.jsx
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Container } from '@mui/material';
 import { useAuth } from '../components/AuthContext';
 import Achievements from '../components/Achievements';
 import DogCards from '../components/DogCards';
 import ProfileInfo from '../components/ProfileInfo';
+import { fetchDogs } from '../services/dogService';
 
 const ProfilePage = () => {
   const { user } = useAuth();
+  const [dogs, setDogs] = useState([]);
+
+  const fetchDogsServer = async () => {
+    const dog_data = fetchDogs(user.uid);
+    return dog_data;
+  };
+
+  useEffect(() => {
+    const loadDogs = async () => {
+      if (user) {
+        try {
+          const dogs = await fetchDogs(user.uid);
+          const dogsData = dogs.map(([id, name]) => ({ id, name }));
+          setDogs(dogsData);
+        } catch (error) {
+          console.error('Error fetching dogs:', error);
+        }
+      }
+    };
+
+    loadDogs();
+  }, [user]);
+
+  // This function will (eventually) update the dog cards when a dog is removed 
+  const handleDogRemoved = (pinId) => {
+    setPins(pins.filter(pin => pin.id !== pinId));
+  };
+
+  // This function will update the dog cards when a dog is updated
+  const handleDogUpdated = async () => {
+    const updatedDogs = await fetchDogsServer();
+    const dogsData = updatedDogs.map(([id, name]) => ({ id, name }));
+    setDogs(dogsData);
+  };
 
   return (
     <Container maxWidth="lg" sx={{ px: 2 }}>
@@ -22,7 +57,11 @@ const ProfilePage = () => {
             <Achievements />
 
             {/* Dog Cards Section */}
-            <DogCards />
+            <DogCards
+              dogs={dogs}
+              onDogRemoved={handleDogRemoved}
+              onDogUpdated={handleDogUpdated} 
+            />
           </>
         )}
       </Box>

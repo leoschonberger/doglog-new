@@ -1,26 +1,31 @@
-//DogCards.jsx
+// DogCards.jsx
 
 import React from 'react';
-import { Box, Typography, Grid, Card, CardContent } from '@mui/material';
+import { Box, Typography, Grid, Card, CardContent, IconButton } from '@mui/material';
+import DogActionsDropdown from './DogActionsDropdown';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 
-const DogCards = () => {
+const DogCards = ({ dogs , onDogRemoved, onDogUpdated}) => {
   return (
     <Box mt={4} width="100%">
       <Typography variant="h6" align="left" gutterBottom>
         Your Dogs
       </Typography>
       <Grid container spacing={2}>
-        {/* Placeholder for dog cards */}
-        {[...Array(2)].map((_, index) => (
-          <Grid item xs={12} sm={6} md={4} key={index}>
+        {dogs.map((dog) => (
+          <Grid item xs={12} sm={6} md={4} key={dog.id}>
             <Card sx={{ height: '100%' }}>
               <CardContent>
-                <Typography variant="h6" align="center">
-                  Milo
-                </Typography>
-                <Typography variant="body2" align="center">
-                  Placeholder for Dog Stats
-                </Typography>
+                <Box display="flex" justifyContent="space-between" alignItems="center">
+                  <Typography variant="h6" align="center">
+                    {dog.name}
+                  </Typography>
+                  <DogActionsDropdown
+                    dogId={dog.id}
+                    onDogRemoved={() => onDogRemoved(dog.id)} 
+                    onDogUpdated={onDogUpdated} 
+                  />
+                </Box>
               </CardContent>
             </Card>
           </Grid>
