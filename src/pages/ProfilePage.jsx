@@ -34,8 +34,8 @@ const ProfilePage = () => {
   }, [user]);
 
   // This function will (eventually) update the dog cards when a dog is removed 
-  const handleDogRemoved = (pinId) => {
-    setPins(pins.filter(pin => pin.id !== pinId));
+  const handleDogRemoved = (dogId) => {
+    setDogs(dogs.filter(dog => dog.id !== dogId));
   };
 
   // This function will update the dog cards when a dog is updated

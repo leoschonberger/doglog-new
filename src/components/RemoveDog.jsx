@@ -9,9 +9,10 @@ import { removePin } from '../services/pinService';
 import { useAuth } from '../components/AuthContext';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
+import { removeDog } from '../services/dogService';
 
 
-const RemoveDog = ({ pinId, onPinRemoved }) => {
+const RemoveDog = ({ dogId, onDogRemoved }) => {
     // Authenticate user
     const { user } = useAuth();
     const [open, setOpen] = useState(false);
@@ -26,20 +27,20 @@ const RemoveDog = ({ pinId, onPinRemoved }) => {
 
     const handleConfirmRemove = async () => {
         handleClose();
-        await handleRemovePin();
+        await handleRemoveDog();
     };
 
     // // Function to handle the removal of the pin
-    const handleRemovePin = async () => {
+    const handleRemoveDog = async () => {
         try {
             // Call the removePin service with the user's ID and the pinId
-            await removePin(user.id, pinId);
-            console.log('Pin removed successfully');
-            onPinRemoved();
+            await removeDog(user.id, dogId);
+            console.log('Dog removed successfully');
+            onDogRemoved();
         
         // Log the error
         } catch (error) {
-            console.error('Error removing pin:', error);
+            console.error('Error removing dog:', error);
         }
     };
 
