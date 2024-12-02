@@ -7,6 +7,7 @@ import Navbar from './components/Navbar';
 import MapPage from './pages/MapPage';
 import Login from './components/Login';
 import ActivityPage from './pages/ActivityPage';
+import ProfilePage from './pages/ProfilePage'; // Import the ProfilePage component
 import { AuthProvider } from './components/AuthContext';
 import AchievementPage from './components/AchievementPage';
 
@@ -20,6 +21,7 @@ function App() {
           <Route path="/map" element={<MapPage />} />
           <Route path="/activity" element={<ActivityPage />} />
           <Route path="/ach" element={<AchievementPage />} />
+          <Route path="/profile" element={<ProfilePage />} /> {/* Add the profile route */}
         </Routes>
       </Router>
     </AuthProvider>

@@ -34,9 +34,12 @@ const Navbar = () => {
           Activity
         </Button>
         {user ? (
-          <Button color="inherit" onClick={handleSignOut}>
-            Sign Out
-          </Button>
+          <>
+            <Button color="inherit" component={Link} to="/profile">Profile</Button>
+            <Button color="inherit" onClick={handleSignOut}>
+              Sign Out
+            </Button>
+          </>
         ) : (
           <Button color="inherit" onClick={() => navigate('/')}>
             Login
