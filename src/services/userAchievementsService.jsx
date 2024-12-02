@@ -1,9 +1,10 @@
 // Achievements service to interact with the userAchievements collection in Firestore. This service provides funtions to retrieve, add, and remove achievements for a specific user. It also includes a function to check if a user has completed any new achievements based on certain criteria.
 
-import { db } from './firebase'; // Firebase initialization file
-import { collection, doc, getDoc, updateDoc, setDoc } from 'firebase/firestore';
+import { db } from '../config/firebase'; // Firebase initialization file
+import { collection, doc, getDoc, updateDoc, setDoc, getDocs, query, where } from 'firebase/firestore';
 
 const userAchievementsCollection = collection(db, 'userAchievements');
+const pinsCollection = collection(db, 'pins');
 
 /**
  * Retrieves all achievements for a specific user.
@@ -77,46 +78,69 @@ export const removeUserAchievement = async (userId, achievementId) => {
 };
 
 /**
- * Checks if a user has completed any new achievements and updates the database.
+ * Checks the number of restroom events logged by the user and adds the corresponding achievements.
  * @param {string} userId - The ID of the user.
- * @param {Object} criteria - Criteria to check for completed achievements.
- * Example:
- * {
- *   poopCount: 50,          // Number of poop spots logged by the user
- *   consecutiveDays: 10,    // Number of consecutive days the user has logged activities
- *   leaderboardRank: 1      // Current leaderboard rank
- * }
  * @returns {Promise<void>}
  */
-export const checkUserAchievements = async (userId, criteria) => {
+export const checkAndAddRestroomAchievements = async (userId) => {
   try {
-    const allAchievementsSnapshot = await getDocs(collection(db, 'achievements'));
-    const allAchievements = allAchievementsSnapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    }));
+    // Fetch all pins (restroom events) for the user
+    const q = query(pinsCollection, where('userId', '==', userId));
+    const querySnapshot = await getDocs(q);
+    const restroomEventCount = querySnapshot.size;
 
-    const completedAchievements = allAchievements.filter((achievement) =>
-      Object.keys(criteria).every((key) => criteria[key] >= achievement[key])
-    );
+    // Define achievement criteria
 
-    const userAchievementsRef = doc(userAchievementsCollection, userId);
-    const userAchievementsDoc = await getDoc(userAchievementsRef);
-    const currentAchievements = userAchievementsDoc.exists()
-      ? userAchievementsDoc.data().achievements
-      : [];
+    const numPoopsCriteria = [
+      {
+        "id": "poop1",
+        "description": "You logged your first poop!",
+        "poopCount": 1,
+        "name": "First Poop"
+      },
+      {
+        "id": "poop10",
+        "name": "The Decalogs of Doo",
+        "poopCount": 10,
+        "description": "You've tracked 10 poops, you're on a roll!"
+      },
+      {
+        "id": "poop100",
+        "poopCount": 100,
+        "description": "You've tracked 100 bathroom breaks! You're a legend!",
+        "name": "Turd Titan"
+      },
+      {
+        "id": "poop25",
+        "poopCount": 25,
+        "name": "Doo-ty Bound Legend",
+        "description": "You've logged 25 poops! Po(o)p off!"
+      },
+      {
+        "id": "poop5",
+        "poopCount": 5,
+        "description": "You've tracked 5 poop events! Keep it up!",
+        "name": "Five-Star Stinker"
+      },
+      {
+        "id": "poop50",
+        "description": "You've logged 50 poops! Super duper duper pooper.",
+        "name": "Master of the Mess",
+        "poopCount": 50
+      }
+    ];
 
-    const newAchievements = completedAchievements.filter(
-      (ach) => !currentAchievements.some((curr) => curr.id === ach.id)
-    );
+    // Fetch user's current achievements
+    const userAchievements = await getUserAchievements(userId);
 
-    if (newAchievements.length > 0) {
-      await updateDoc(userAchievementsRef, {
-        achievements: [...currentAchievements, ...newAchievements],
-      });
+    // Check and add achievements
+    for (const criteria of numPoopsCriteria) {
+      if (restroomEventCount >= criteria.poopCount && !userAchievements.some(ach => ach.id === criteria.id)) {
+        await addUserAchievement(userId, { ...criteria, earnedAt: new Date().toISOString() });
+      }
     }
   } catch (error) {
-    console.error('Error checking user achievements:', error);
+    console.error('Error checking and adding restroom achievements:', error);
     throw error;
   }
 };
