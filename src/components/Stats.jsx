@@ -13,19 +13,25 @@ const Stats = ({ stats }) => {
   return (
     <Grid container spacing={1} mt={2}>
       {statItems.map((stat, index) => (
-        <Grid item xs={6} sm={3} key={index}>
+        <Grid item xs={6} key={index}>
           <Box
             display="flex"
             flexDirection="column"
-            alignItems="center"
             justifyContent="center"
+            alignItems="center"
             border={1}
             borderRadius={2}
             p={2}
+            height="100px"
             textAlign="center"
+            sx={{ backgroundColor: '#f5f5f5' }}
           >
-            <Typography variant="h6">{stat.value}</Typography>
-            <Typography variant="body2" color="textSecondary">{stat.label}</Typography>
+            <Typography variant="body2" color="textSecondary">
+              {stat.label}
+            </Typography>
+            <Typography variant="h6">
+              {stat.value}
+            </Typography>
           </Box>
         </Grid>
       ))}

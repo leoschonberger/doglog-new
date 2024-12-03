@@ -98,7 +98,7 @@ const ActivityList = () => {
           {filteredPins.map((pin) => {
           const dog = dogs.find((dog) => dog.id === pin.dogID) || { name: "Unknown" };
           return (
-            <Card key={pin.id} style={{ width: "50%" , backgroundColor: "#1e1e1e", color: "white", minWidth: 400, maxWidth: 600 }}>
+            <Card key={pin.id} style={{ width: "50%" , backgroundColor: "#0d324d", color: "white", minWidth: 400, maxWidth: 600 }}>
               <CardContent>
                 <Box display="flex" justifyContent="space-between" alignItems="center">
                   <Typography variant="h6">

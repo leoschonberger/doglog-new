@@ -30,9 +30,9 @@ const DogCards = ({ dogs, onDogRemoved, onDogUpdated }) => {
       <Grid container spacing={2}>
         {detailedDogs.map((dog) => (
           <Grid item xs={12} sm={6} md={4} key={dog.id}>
-            <Card sx={{ height: '100%' }}>
+            <Card sx={{ height: '100%', backgroundColor: '#0d324d' }}>
               <CardContent>
-                <Box display="flex" justifyContent="space-between" alignItems="center">
+                <Box display="flex" justifyContent="space-between" alignItems="center" sx={{ color: 'white' }}>
                   <Typography variant="h6" align="center">
                     {dog.Name}, {dog.Age}
                   </Typography>
@@ -42,7 +42,7 @@ const DogCards = ({ dogs, onDogRemoved, onDogUpdated }) => {
                     onDogUpdated={onDogUpdated}
                   />
                 </Box>
-                <Typography variant="body2" align="left" color="textSecondary">
+                <Typography variant="body2" align="left" color="white">
                   {dog.Breed} | {dog.Gender}
                 </Typography>
                 <Stats stats={dog.stats} />
