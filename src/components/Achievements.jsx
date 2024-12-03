@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Typography, Tooltip } from '@mui/material';
 import { useAuth } from '../components/AuthContext';
-import { getUserAchievements, checkAndAddRestroomAchievements } from '../services/userAchievementsService';
+import { getUserAchievements, checkAndAddAchievements } from '../services/userAchievementsService';
 import { getAchievements } from '../services/achievementsService';
 
 const Achievements = () => {
@@ -16,7 +16,7 @@ const Achievements = () => {
       try {
         if (user) {
           // Check and add restroom achievements
-          await checkAndAddRestroomAchievements(user.uid);
+          await checkAndAddAchievements(user.uid);
 
           const userAchievementsData = await getUserAchievements(user.uid);
           setUserAchievements(userAchievementsData);

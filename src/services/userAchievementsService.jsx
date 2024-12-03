@@ -78,11 +78,11 @@ export const removeUserAchievement = async (userId, achievementId) => {
 };
 
 /**
- * Checks the number of restroom events logged by the user and adds the corresponding achievements.
+ * Checks the user's activities and adds the corresponding achievements.
  * @param {string} userId - The ID of the user.
  * @returns {Promise<void>}
  */
-export const checkAndAddRestroomAchievements = async (userId) => {
+export const checkAndAddAchievements = async (userId) => {
   try {
     // Fetch all pins (restroom events) for the user
     const q = query(pinsCollection, where('userId', '==', userId));
@@ -90,8 +90,7 @@ export const checkAndAddRestroomAchievements = async (userId) => {
     const restroomEventCount = querySnapshot.size;
 
     // Define achievement criteria
-
-    const numPoopsCriteria = [
+    const achievementCriteria = [
       {
         "id": "poop1",
         "description": "You logged your first poop!",
@@ -127,6 +126,25 @@ export const checkAndAddRestroomAchievements = async (userId) => {
         "description": "You've logged 50 poops! Super duper duper pooper.",
         "name": "Master of the Mess",
         "poopCount": 50
+      },
+      {
+        "id": "night_owl",
+        "description": "You've taken a walk or pooped between 11pm and 5am!",
+        "name": "Night Owl",
+        "timeRangeStart": 23,
+        "timeRangeEnd": 5
+      },
+      {
+        "id": "seven_day_streak",
+        "description": "You've logged events for 7 days in a row!",
+        "name": "Week of Logs",
+        "streakDays": 7
+      },
+      {
+        "id": "super_feeder",
+        "description": "You've fed a single dog more than three times in one day!",
+        "name": "Super Feeder",
+        "feedCount": 3
       }
     ];
 
@@ -134,13 +152,79 @@ export const checkAndAddRestroomAchievements = async (userId) => {
     const userAchievements = await getUserAchievements(userId);
 
     // Check and add achievements
-    for (const criteria of numPoopsCriteria) {
-      if (restroomEventCount >= criteria.poopCount && !userAchievements.some(ach => ach.id === criteria.id)) {
+    for (const criteria of achievementCriteria) {
+      if (criteria.poopCount && restroomEventCount >= criteria.poopCount && !userAchievements.some(ach => ach.id === criteria.id)) {
         await addUserAchievement(userId, { ...criteria, earnedAt: new Date().toISOString() });
+      }
+
+      if (criteria.timeRangeStart && criteria.timeRangeEnd) {
+        console.log('Checking night owl achievement');
+        const nightOwlAchievement = querySnapshot.docs.some(doc => {
+          const timestamp = doc.data().timestamp.toDate();
+          const hours = timestamp.getHours();
+          return (hours >= criteria.timeRangeStart || hours < criteria.timeRangeEnd);
+        });
+
+        if (nightOwlAchievement && !userAchievements.some(ach => ach.id === criteria.id)) {
+          await addUserAchievement(userId, { ...criteria, earnedAt: new Date().toISOString() });
+        }
+      }
+
+      if (criteria.streakDays) {
+        const dates = querySnapshot.docs.map(doc => doc.data().timestamp.toDate().toDateString());
+        const uniqueDates = [...new Set(dates)];
+        uniqueDates.sort((a, b) => new Date(a) - new Date(b));
+
+        let streak = 1;
+        for (let i = 1; i < uniqueDates.length; i++) {
+          const prevDate = new Date(uniqueDates[i - 1]);
+          const currDate = new Date(uniqueDates[i]);
+          const diffTime = Math.abs(currDate - prevDate);
+          const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+          if (diffDays === 1) {
+            streak++;
+            if (streak >= criteria.streakDays && !userAchievements.some(ach => ach.id === criteria.id)) {
+              await addUserAchievement(userId, { ...criteria, earnedAt: new Date().toISOString() });
+              break;
+            }
+          } else {
+            streak = 1;
+          }
+        }
+      }
+
+      if (criteria.feedCount) {
+        const feedEvents = querySnapshot.docs.filter(doc => doc.data().event === 'Meal');
+        const feedCounts = {};
+
+        feedEvents.forEach(doc => {
+          const data = doc.data();
+          const date = data.timestamp.toDate().toDateString();
+          const dogId = data.dogId;
+
+          if (!feedCounts[dogId]) {
+            feedCounts[dogId] = {};
+          }
+
+          if (!feedCounts[dogId][date]) {
+            feedCounts[dogId][date] = 0;
+          }
+
+          feedCounts[dogId][date]++;
+        });
+
+        const superFeederAchievement = Object.values(feedCounts).some(dogFeeds =>
+          Object.values(dogFeeds).some(count => count > criteria.feedCount)
+        );
+
+        if (superFeederAchievement && !userAchievements.some(ach => ach.id === criteria.id)) {
+          await addUserAchievement(userId, { ...criteria, earnedAt: new Date().toISOString() });
+        }
       }
     }
   } catch (error) {
-    console.error('Error checking and adding restroom achievements:', error);
+    console.error('Error checking and adding achievements:', error);
     throw error;
   }
 };
