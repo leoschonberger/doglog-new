@@ -43,7 +43,7 @@ const MapPage = () => {
 
   return (
     <Box>
-        <Grid2 container spacing={1} >
+        <Grid2 container spacing={2} paddingRight={1}>
           <Grid2 size={{xs:12, md: 8, lg: 8, xl: 9}}>
                <Map pins={pins} onMapClick={setClickedLocation} />
           </Grid2>
