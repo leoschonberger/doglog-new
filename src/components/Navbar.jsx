@@ -1,10 +1,11 @@
 // Navbar.js
 import React from 'react';
-import { AppBar, Toolbar, Typography, Button } from '@mui/material';
+import { AppBar, Toolbar, Typography, Button, Box } from '@mui/material';
 import { useAuth } from '../components/AuthContext'; // Access user context
 import { signOut } from 'firebase/auth';
 import { auth } from '../config/firebase';
 import { useNavigate, Link } from 'react-router-dom';
+import favicon from '../../public/favicon-32x32.png'; // Import the favicon image
 
 const Navbar = () => {
   const { user } = useAuth(); // Get user from context
@@ -24,15 +25,17 @@ const Navbar = () => {
   return (
     <AppBar position="static">
       <Toolbar>
+        {/* Favicon and Title */}
+        <Box display="flex" alignItems="center">
+          <img src={favicon} alt="DogLog Logo" style={{ width: 32, height: 32, marginRight: 8 }} />
+          <Typography variant="h3" component="div" sx={{ flexGrow: 1 }}>
+            DogLog
+          </Typography>
+        </Box>
         {/* Link to Map */}
-        <Typography variant="h3" component="div" sx={{ flexGrow: 1 }}>
-          DogLog
-        </Typography>
         <Button color="inherit" component={Link} to="/map">Map</Button>
         {/* Link to Activity page */}
-        <Button color="inherit" component={Link} to="/activity">
-          Activity
-        </Button>
+        <Button color="inherit" component={Link} to="/activity">Activity</Button>
         {user ? (
           <>
             <Button color="inherit" component={Link} to="/profile">Profile</Button>
