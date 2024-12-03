@@ -16,7 +16,8 @@ export const averageBathroomEventsPerWeek = async (dogId) => {
     const startOfWeek = new Date(date.setDate(date.getDate() - date.getDay()));
     return startOfWeek.toISOString();
   }));
-  return bathroomEvents.length / weeks.size;
+  const avgBathroomPerWk = bathroomEvents.length / weeks.size;
+  return parseFloat(avgBathroomPerWk.toFixed(2));
 };
 
 // Function to calculate the total number of events
@@ -30,7 +31,8 @@ export const bathroomToMealRatio = async (dogId) => {
   const events = await fetchDogEvents(dogId);
   const bathroomEvents = events.filter(event => event.event === 'Restroom').length;
   const mealEvents = events.filter(event => event.event === 'Meal').length;
-  return mealEvents === 0 ? bathroomEvents : bathroomEvents / mealEvents;
+  const ratio = mealEvents === 0 ? bathroomEvents : bathroomEvents / mealEvents;
+  return parseFloat(ratio.toFixed(2));
 };
 
 // Function to calculate the time since the last bathroom event
@@ -40,5 +42,6 @@ export const timeSinceLastBathroomEvent = async (dogId) => {
     if (bathroomEvents.length === 0) return null;
     const lastBathroomEvent = new Date(Math.max(...bathroomEvents.map(event => event.timestamp.seconds * 1000)));
     const now = new Date();
-    return Math.floor((now - lastBathroomEvent) / (1000 * 60 * 60)); // Return the difference in hours
+    const hrsSinceLast = Math.floor((now - lastBathroomEvent) / (1000 * 60 * 60)); // Return the difference in hours
+    return parseFloat(hrsSinceLast.toFixed(2));
   };
