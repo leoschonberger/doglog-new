@@ -3,6 +3,7 @@
 
 import { db } from '../config/firebase';
 import { collection, query, where, orderBy, getDocs, addDoc, doc, getDoc, updateDoc, deleteDoc } from 'firebase/firestore';
+import { averageBathroomEventsPerWeek, totalEvents, bathroomToMealRatio, timeSinceLastBathroomEvent } from './dogStats';
 
 export const fetchDogs = async (userId) => {
   // Function to return tuple of (ID, name) of the dogs that belong to a specific user (userID)
@@ -16,7 +17,8 @@ export const fetchDog = async (dogId) => {
   // Function to return the dog document with the given dogID
   const dogRef = doc(db, 'dogs', dogId);
   const dogDoc = await getDoc(dogRef);
-  return dogDoc;
+  const dogData = { id: dogDoc.id, ...dogDoc.data() };
+  return dogData;
 }
 
 export const fetchPins = async (dogID) => {
@@ -54,4 +56,18 @@ export const removeDog = async (userId, dogId) => {
     const dogRef = doc(db, 'dogs', dogId);
     await deleteDoc(dogRef);
   }
+};
+
+export const fetchStats = async (dogId) => {
+  const avgBathroomPerWk = await averageBathroomEventsPerWeek(dogId);
+  const totalEvts = await totalEvents(dogId);
+  const bathroomMealRatio = await bathroomToMealRatio(dogId);
+  const timeSinceLastBathroom = await timeSinceLastBathroomEvent(dogId);
+
+  return {
+    AvgBathroomPerWk: avgBathroomPerWk,
+    TotalEvents: totalEvts,
+    BathroomToMealRatio: bathroomMealRatio,
+    TimeSinceLastBathroom: timeSinceLastBathroom,
+  };
 };

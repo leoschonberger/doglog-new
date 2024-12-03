@@ -49,6 +49,17 @@ const PinInputForm = ({ clickedLocation, onPinAdded }) => {
     }
   }, [user]);
 
+  // Set the initial value of the timestamp to the current date and time
+  useEffect(() => {
+    resetTimestamp();
+  }, []);
+  
+  const resetTimestamp = async (e) => {
+    const now = new Date();
+    const localDateTime = now.toLocaleString('sv-SE', { timeZoneName: 'short' }).replace(' ', 'T');
+    setTimestamp(localDateTime.slice(0, 16));
+  };
+
   // Handle form submission to add a new pin
   const handleAddPin = async (e) => {
     e.preventDefault();
@@ -76,10 +87,10 @@ const PinInputForm = ({ clickedLocation, onPinAdded }) => {
       setDogID('');
       setEvent('');
       setTitle('');
-      setTimestamp('');
       setDescription('');
       setError('');
       onPinAdded();
+      resetTimestamp();
     } catch (error) {
       console.error('Error adding pin:', error);
     }
@@ -119,9 +130,10 @@ const PinInputForm = ({ clickedLocation, onPinAdded }) => {
                 onChange={(e) => setLongitude(e.target.value)}
                 margin="normal"
               />
-              <FormControl fullWidth margin="normal" error={!dogID && !!error}>
+              <FormControl fullWidth margin="normal" variant="outlined" error={!dogID && !!error}>
                 <InputLabel>Dog*</InputLabel>
                 <Select
+                  label="Dog"
                   value={dogID}
                   onChange={(e) => {
                     const selectedDog = dogNames.find(dog => dog[0] === e.target.value);
@@ -135,9 +147,10 @@ const PinInputForm = ({ clickedLocation, onPinAdded }) => {
                 </Select>
                 <FormHelperText>{!dogID && error && 'Dog is required'}</FormHelperText>
               </FormControl>
-              <FormControl fullWidth margin="normal" error={!event && !!error}>
+              <FormControl fullWidth margin="normal" variant="outlined" error={!event && !!error}>
                 <InputLabel>Event*</InputLabel>
                 <Select
+                  label="Event"
                   value={event}
                   onChange={(e) => setEvent(e.target.value)}
                 >

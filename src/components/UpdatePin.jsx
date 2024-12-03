@@ -58,8 +58,8 @@ const UpdatePin = ({ pinId, onPinUpdated }) => {
                 // If the pin is found, set the state with the pin data
                 if (pinDoc.exists()) {
                     const pinData = pinDoc.data();
-                    setLatitude(pinData.latitude);
-                    setLongitude(pinData.longitude);
+                    setLatitude(pinData.latitude || '');
+                    setLongitude(pinData.longitude || '');
                     setEvent(pinData.event);
                     setDogID(pinData.dogID);
                     setTitle(pinData.title);

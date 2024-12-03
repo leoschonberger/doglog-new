@@ -1,10 +1,12 @@
 // Login.js
-import React, { useState } from 'react';
+
+import React, { useState, useEffect } from 'react';
 import { Box, Button, Typography, Container, Alert } from '@mui/material';
 import { signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 import { auth } from '../config/firebase';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../components/AuthContext';
+import { fetchDogs } from '../services/dogService';
 
 const provider = new GoogleAuthProvider();
 
@@ -19,16 +21,25 @@ const Login = () => {
     try {
       await signInWithPopup(auth, provider);
       console.log('User signed in with Google successfully');
-      navigate('/map'); // Navigate to the Map page
     } catch (error) {
       setError(error.message); // Display error message
     }
   };
 
-  // If the user is already logged in, redirect to the map page
-  if (user) {
-    navigate('/map');
-  }
+  useEffect(() => {
+    const checkUserDogs = async () => {
+      if (user) {
+        const dogs = await fetchDogs(user.uid);
+        if (dogs.length === 0) {
+          navigate('/welcome'); // Redirect to the welcome page if no dogs are found
+        } else {
+          navigate('/map'); // Redirect to the map page if dogs are found
+        }
+      }
+    };
+
+    checkUserDogs();
+  }, [user, navigate]);
 
   return (
     <Container maxWidth="xs">
