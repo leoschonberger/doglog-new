@@ -26,6 +26,14 @@ const userLocationpin = new L.Icon({
   popupAnchor: [1, -34],
 });
 
+const selectionMarker = new L.Icon({
+  iconUrl: 'https://as2.ftcdn.net/v2/jpg/07/03/39/19/1000_F_703391990_vpMHPTgtS95mDeLo3frkw9iJDO5EIoZp.webp',
+  iconSize: [60, 60],
+  iconAnchor: [30, 50],
+  popupAnchor: [1, -34],
+}
+)
+
 // Component to set the map view to the user's location
 const LocationMarker = ({ position }) => {
   const map = useMap();
@@ -107,8 +115,8 @@ const Map = ({ pins, onMapClick, onPinAdded }) => {
         ))}
 
         {clickedLocation && (
-          <Marker position={clickedLocation} icon={pinIcon}>
-            <Popup>
+          <Marker position={clickedLocation} icon={selectionMarker}>
+            {/* <Popup>
               <PinInputForm
                 clickedLocation={clickedLocation}
                 onPinAdded={() => {
@@ -116,7 +124,7 @@ const Map = ({ pins, onMapClick, onPinAdded }) => {
                   setClickedLocation(null);
                 }}
               />
-            </Popup>
+            </Popup> */}
           </Marker>
         )}
       </MapContainer>
