@@ -47,9 +47,6 @@ const MapPage = () => {
       <Container maxWidth="md">
         <Map pins={pins} onMapClick={setClickedLocation} />
         {/* temp */}
-        <Box display="flex" justifyContent="center" mt={4}>
-          <AddDog />
-        </Box>
         <Box mt={4}> {/* Adds margin-top of 4 units */}
           <PinInputForm clickedLocation={clickedLocation} onPinAdded={loadPins} />
         </Box>
