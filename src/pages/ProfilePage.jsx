@@ -64,7 +64,7 @@ const ProfilePage = () => {
               onDogUpdated={handleDogUpdated} 
             />
             <Box display="flex" flexDirection="column" alignItems="center" mt={4}>
-              <AddDog />
+              <AddDog onDogAdded={handleDogUpdated}/>
             </Box>
           </>
         )}
