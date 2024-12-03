@@ -49,6 +49,17 @@ const PinInputForm = ({ clickedLocation, onPinAdded }) => {
     }
   }, [user]);
 
+  // Set the initial value of the timestamp to the current date and time
+  useEffect(() => {
+    resetTimestamp();
+  }, []);
+  
+  const resetTimestamp = async (e) => {
+    const now = new Date();
+    const localDateTime = now.toLocaleString('sv-SE', { timeZoneName: 'short' }).replace(' ', 'T');
+    setTimestamp(localDateTime.slice(0, 16));
+  };
+
   // Handle form submission to add a new pin
   const handleAddPin = async (e) => {
     e.preventDefault();
@@ -76,10 +87,10 @@ const PinInputForm = ({ clickedLocation, onPinAdded }) => {
       setDogID('');
       setEvent('');
       setTitle('');
-      setTimestamp('');
       setDescription('');
       setError('');
       onPinAdded();
+      resetTimestamp();
     } catch (error) {
       console.error('Error adding pin:', error);
     }
