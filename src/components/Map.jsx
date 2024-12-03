@@ -6,6 +6,7 @@ import L from 'leaflet';
 import { Container } from '@mui/material';
 import { useAuth } from '../components/AuthContext';
 import PinInputForm from './PinInputForm';
+import { FileX } from 'tabler-icons-react';
 
 // Custom icon for pins
 const pinIcon = new L.Icon({
@@ -15,6 +16,14 @@ const pinIcon = new L.Icon({
   popupAnchor: [1, -34],
   shadowUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png',
   shadowSize: [41, 41],
+});
+
+// Custom icon for pins
+const userLocationpin = new L.Icon({
+  iconUrl: 'https://static.thenounproject.com/png/1417883-200.png',
+  iconSize: [60, 60],
+  iconAnchor: [30, 50],
+  popupAnchor: [1, -34],
 });
 
 // Component to set the map view to the user's location
@@ -28,7 +37,7 @@ const LocationMarker = ({ position }) => {
   }, [map, position]);
 
   return position ? (
-    <Marker position={position} icon={pinIcon}>
+    <Marker position={position} icon={userLocationpin}>
       <Popup>You are here</Popup>
     </Marker>
   ) : null;
@@ -69,11 +78,11 @@ const Map = ({ pins, onMapClick, onPinAdded }) => {
   };
 
   return (
-    <Container maxWidth="md" sx={{ mt: 4 }}>
       <MapContainer
         center={userLocation || [44.042265, -123.074378]}
         zoom={13}
-        style={{ height: '500px', width: '100%' }}
+        style={{ height: '80vh', width: '100%', marginTop: '30px', marginLeft: '1vw' }}
+        position={'absolute'}
       >
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -111,7 +120,6 @@ const Map = ({ pins, onMapClick, onPinAdded }) => {
           </Marker>
         )}
       </MapContainer>
-    </Container>
   );
 };
 
