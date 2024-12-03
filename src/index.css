@@ -12,4 +12,17 @@ html {
 
 body {
   font-family: "Raleway", sans-serif;
+  background-color: #D3FAD6; /* Change this to your desired background color */
+  color: #333; /* Optional: Set a default text color */
+  margin: 0; /* Ensure no default margin */
+  padding: 0; /* Ensure no default padding */
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
 }
