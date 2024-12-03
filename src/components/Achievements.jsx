@@ -66,7 +66,6 @@ const Achievements = () => {
                 sx={{
                   width: '100%',
                   aspectRatio: '1/1',
-                  backgroundColor: '#d3d3d3',
                   borderRadius: '50%',
                   display: 'flex',
                   justifyContent: 'center',
