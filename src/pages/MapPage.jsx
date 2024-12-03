@@ -4,7 +4,7 @@
 import React, { useState, useEffect } from 'react';
 import Map from '../components/Map';
 import PinInputForm from '../components/PinInputForm';
-import { Box, Container, Grid2 } from '@mui/material';
+import { Box, Grid2 } from '@mui/material';
 import { fetchPins } from '../services/pinService';
 import { useAuth } from '../components/AuthContext';
 

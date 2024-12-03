@@ -28,7 +28,7 @@ const DogActionsDropdown = ({ dogId, onDogRemoved, onDogUpdated }) => {
                 aria-controls="long-menu"
                 aria-haspopup="true"
                 onClick={handleClick}
-                style={{ color: 'black' }}
+                style={{ color: 'white' }}
             >
                 <MoreVertIcon />
             </IconButton>
