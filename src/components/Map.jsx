@@ -89,7 +89,7 @@ const Map = ({ pins, onMapClick, onPinAdded }) => {
       <MapContainer
         center={userLocation || [44.042265, -123.074378]}
         zoom={13}
-        style={{ height: '80vh', width: '100%', marginTop: '30px', marginLeft: '1vw' }}
+        style={{ height: '70vh', width: '100%', marginTop: '30px', marginLeft: '1vw' }}
         position={'absolute'}
       >
         <TileLayer
