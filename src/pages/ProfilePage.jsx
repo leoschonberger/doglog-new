@@ -7,6 +7,7 @@ import Achievements from '../components/Achievements';
 import DogCards from '../components/DogCards';
 import ProfileInfo from '../components/ProfileInfo';
 import { fetchDogs } from '../services/dogService';
+import AddDog from '../components/AddDog';
 
 const ProfilePage = () => {
   const { user } = useAuth();
@@ -62,6 +63,9 @@ const ProfilePage = () => {
               onDogRemoved={handleDogRemoved}
               onDogUpdated={handleDogUpdated} 
             />
+            <Box display="flex" flexDirection="column" alignItems="center" mt={4}>
+              <AddDog />
+            </Box>
           </>
         )}
       </Box>

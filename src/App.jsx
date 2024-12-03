@@ -8,6 +8,7 @@ import MapPage from './pages/MapPage';
 import Login from './components/Login';
 import ActivityPage from './pages/ActivityPage';
 import ProfilePage from './pages/ProfilePage'; // Import the ProfilePage component
+import OnboardingPage from './pages/OnboardingPage';
 import { AuthProvider } from './components/AuthContext';
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
           <Route path="/map" element={<MapPage />} />
           <Route path="/activity" element={<ActivityPage />} />
           <Route path="/profile" element={<ProfilePage />} /> {/* Add the profile route */}
+          <Route path="/welcome" element={<OnboardingPage />} /> {/* Add the welcome route */}
         </Routes>
       </Router>
     </AuthProvider>

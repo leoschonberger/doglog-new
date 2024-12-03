@@ -119,9 +119,10 @@ const PinInputForm = ({ clickedLocation, onPinAdded }) => {
                 onChange={(e) => setLongitude(e.target.value)}
                 margin="normal"
               />
-              <FormControl fullWidth margin="normal" error={!dogID && !!error}>
+              <FormControl fullWidth margin="normal" variant="outlined" error={!dogID && !!error}>
                 <InputLabel>Dog*</InputLabel>
                 <Select
+                  label="Dog"
                   value={dogID}
                   onChange={(e) => {
                     const selectedDog = dogNames.find(dog => dog[0] === e.target.value);
@@ -135,9 +136,10 @@ const PinInputForm = ({ clickedLocation, onPinAdded }) => {
                 </Select>
                 <FormHelperText>{!dogID && error && 'Dog is required'}</FormHelperText>
               </FormControl>
-              <FormControl fullWidth margin="normal" error={!event && !!error}>
+              <FormControl fullWidth margin="normal" variant="outlined" error={!event && !!error}>
                 <InputLabel>Event*</InputLabel>
                 <Select
+                  label="Event"
                   value={event}
                   onChange={(e) => setEvent(e.target.value)}
                 >
