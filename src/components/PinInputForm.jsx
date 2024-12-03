@@ -107,7 +107,7 @@ const PinInputForm = ({ clickedLocation, onPinAdded }) => {
   };
 
   return (
-    <Container maxWidth="sm">
+    <Container>
       <Card>
         <CardContent>
           <Box>

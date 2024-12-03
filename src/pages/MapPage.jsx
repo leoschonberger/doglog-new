@@ -4,8 +4,7 @@
 import React, { useState, useEffect } from 'react';
 import Map from '../components/Map';
 import PinInputForm from '../components/PinInputForm';
-import AddDog from '../components/AddDog';
-import { Box, Container } from '@mui/material';
+import { Box, Grid2 } from '@mui/material';
 import { fetchPins } from '../services/pinService';
 import { useAuth } from '../components/AuthContext';
 
@@ -44,14 +43,15 @@ const MapPage = () => {
 
   return (
     <Box>
-      <Container maxWidth="md">
-        <Map pins={pins} onMapClick={setClickedLocation} />
-        {/* temp */}
-        <Box mt={4}> {/* Adds margin-top of 4 units */}
-          <PinInputForm clickedLocation={clickedLocation} onPinAdded={loadPins} />
-        </Box>
-        
-      </Container>
+        <Grid2 container spacing={1} >
+          <Grid2 size={{xs:12, md: 8, lg: 8, xl: 9}}>
+               <Map pins={pins} onMapClick={setClickedLocation} />
+          </Grid2>
+          <Grid2 size ={{xs:12, md: 4, lg: 4, xl: 3}}>
+            <Box mt={4}></Box>
+            <PinInputForm clickedLocation={clickedLocation} onPinAdded={loadPins} />
+          </Grid2>
+        </Grid2>
     </Box>
   );
 };

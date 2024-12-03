@@ -5,7 +5,7 @@ import { useAuth } from '../components/AuthContext'; // Access user context
 import { signOut } from 'firebase/auth';
 import { auth } from '../config/firebase';
 import { useNavigate, Link } from 'react-router-dom';
-import favicon from '../../public/favicon-32x32.png'; // Import the favicon image
+import favicon from '/favicon-32x32.png'; // Import the favicon image
 
 const Navbar = () => {
   const { user } = useAuth(); // Get user from context
