@@ -1,5 +1,22 @@
 // AddDog.jsx
 
+/*
+ * This file represents the AddDog component which allows users to add a new dog to the system.
+ * 
+ * Group Name: Dog Doo Data
+ * 
+ * Authors:
+ * - Sterling Miller
+ * 
+ * Component: AddDog
+ * Description: This component provides a form for adding a new dog, including fields for the 
+ *              dog's name, age, breed, and gender. Calls the addDog service to add the dog to the
+ *              database.
+ * Created by: Sterling Miller
+ * Last updated by: Sterling Miller
+ * Last updated on: 2024-12-02
+ */
+
 import React, { useState } from 'react';
 import { TextField, Button, Box, Dialog, DialogActions, DialogContent, DialogTitle, MenuItem, Select, InputLabel, FormControl } from '@mui/material';
 import { useAuth } from './AuthContext';
