@@ -1,5 +1,24 @@
 // Login.js
 
+/*
+ * This file represents the Login component which allows users to sign in using Google authentication.
+ * 
+ * Group Name: Dog Doo Data
+ * 
+ * Authors:
+ * - Sterling Miller
+ * - Leo Schonberger
+ * 
+ * Component: Login
+ * Description: This component provides a Google sign-in button and handles user authentication via 
+ *              Firebase Authentication. Navigates to onboarding or map page based on user's dog data.
+ *              Calls signInWithPopup service to authenticate with Google and fetchDogs service to 
+ *              check for existing dogs.
+ * Created by: Leo Schonberger
+ * Last updated by: Sterling Miller
+ * Last updated on: 2024-11-22
+ */
+
 import React, { useState, useEffect } from 'react';
 import { Box, Button, Typography, Container, Alert } from '@mui/material';
 import { signInWithPopup, GoogleAuthProvider } from 'firebase/auth';

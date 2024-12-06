@@ -1,4 +1,22 @@
 // OnboardingPage.jsx
+
+/*
+ * This file represents the OnboardingPage component which provides a welcome message and 
+ * prompts a new user to add a dog.
+ * 
+ * Group Name: Doo Doo Data
+ * 
+ * Authors:
+ * - Sterling Miller
+ * 
+ * Component: OnboardingPage
+ * Description: This component provides a welcome message and prompts a new user to add a dog.
+ *              Uses the AddDog component to add a dog to the user's profile.
+ * Created by: Sterling Miller
+ * Last updated by: Sterling Miller
+ * Last updated on: 2024-11-22
+ */
+
 import React from 'react';
 import AddDog from '../components/AddDog';
 import { Box, Typography, Button, Container } from '@mui/material';

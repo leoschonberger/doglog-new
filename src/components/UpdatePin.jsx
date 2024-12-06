@@ -1,5 +1,22 @@
 // UpdatePin.jsx
-// Form component that allows users to update existing pins
+
+/*
+ * This file represents the UpdatePin component which allows users to update existing pins.
+ * 
+ * Group Name: Doo Doo Data
+ * 
+ * Authors:
+ * - Nick Johnson
+ * - Sterling Miller
+ * 
+ * Component: UpdatePin
+ * Description: This component provides a pop-up form for updating a pin's details including 
+ *              latitude, longitude, event, dog, title, description, and timestamp. Calls the
+ *              updatePin service.
+ * Created by: Sterling Miller
+ * Last updated by: Nick Johnson
+ * Last updated on: 2024-12-02
+ */
 
 import { db } from '../config/firebase';
 import { getDoc, doc } from 'firebase/firestore';

@@ -1,5 +1,19 @@
 // RemovePin.jsx
-// Form component that allows users to remove pins by title
+
+/*
+ * This file represents the RemovePin component which allows users to remove existing pins.
+ * 
+ * Group Name: Doo Doo Data
+ * 
+ * Authors:
+ * - Sterling Miller
+ * 
+ * Component: RemovePin
+ * Description: This component provides a pop-up form for removing a pin. Calls the removePin service.
+ * Created by: Sterling Miller
+ * Last updated by: Sterling Miller
+ * Last updated on: 2024-11-20
+ */
 
 import { Button } from '@mui/material';
 import React, { useState } from 'react';
