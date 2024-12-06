@@ -1,5 +1,13 @@
+DOGLOG - CS 422 Course Project 
+
+Authors: Nathan Cook, Nickolas Johnson, Leo Schonberger, Sterling Miller
+README Creation: November 5th, 2024
+
 # DogLog-New: React + Vite + Firebase 10
 We realized two backends doesn't make any sense. Also, create-react-app is slowww.
+
+## Software Dependencies:
+- Node version 22 or higher
 
 ## What are these tools? 
 From front to back:
@@ -21,7 +29,7 @@ From front to back:
 
 ## How to Develop
 
-#### Files to work on
+#### Subdirectory Specification
 - `src/` contains the source code
     - `components/` contains the React components
     - `config/` contains the Firebase configuration
