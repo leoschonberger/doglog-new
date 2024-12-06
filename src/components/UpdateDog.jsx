@@ -1,6 +1,9 @@
-// UpdateDog.jsx
-// Form component that allows users to update existing dogs
+/*
+UpdateDog.jsx
 
+Component associated with DogActionsDropdown. Represents the form shown when a user initiates updating a dog
+from the DogActionsDropdown component. Allows user to update the name, age, breed, and gender of the dog.
+*/
 import { db } from '../config/firebase';
 import { getDoc, doc } from 'firebase/firestore';
 import React, { useState, useEffect } from 'react';

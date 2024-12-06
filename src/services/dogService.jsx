@@ -1,5 +1,10 @@
-// dogService.jsx
-// Service functions for fetching dog specific information from Firestore
+/*
+dogService.jsx
+
+Service functions for fetching dog specific information from Firestore database. Used as a hub for all dog related
+database calls. Functions include fetching dogs, fetching a specific dog, fetching pins associated with a dog, adding
+a new dog, updating a dog, removing a dog, and fetching dog statistics.
+*/
 
 import { db } from '../config/firebase';
 import { collection, query, where, orderBy, getDocs, addDoc, doc, getDoc, updateDoc, deleteDoc } from 'firebase/firestore';

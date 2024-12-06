@@ -1,4 +1,11 @@
-// Stats.jsx
+/* 
+Stats.jsx
+
+Component that displays the statisics for each dog within their respective dog card on the profile page. 
+Displays the average bathroom events per week, total pins/events created, bathroom to meal ratio, and hours
+since last bathroom event. Calls functions from dogStats.jsx in services directory to calculate these statistics.
+*/
+
 import React from 'react';
 import { Box, Typography, Grid } from '@mui/material';
 

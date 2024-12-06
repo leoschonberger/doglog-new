@@ -1,7 +1,9 @@
-// TODO Still need to update this to be for dogs not pins
+/*
+RemoveDog.jsx
 
-// RemoveDog.jsx
-// Form component that allows users to remove pins by title
+Component associated with DogActionsDropdown. Represents the form shown when a user initiates the removal of a dogs
+from the DogActionsDropdown component. Handles the deletion of a dog in the database with confirmation from user.
+*/
 
 import { Button } from '@mui/material';
 import React, { useState } from 'react';

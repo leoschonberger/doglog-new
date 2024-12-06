@@ -1,5 +1,10 @@
-// PinInputForm.jsx
-// Form component that allows users to add pins with location, title, and timestamp
+/*
+PinInputForm.jsx
+
+Main Pin Addition form component on Map page. Allows users to add a new pin/event to the database
+with information including Longitude, Latitude, Dog, Event, Title, Description, and Timestamp. Also handles
+some features of the form such as automatic timestamp generation and reset of values after addition of Pin.
+*/
 
 import React, { useState, useEffect } from 'react';
 import { TextField, Button, Box, Typography, Container, Select, MenuItem, InputLabel, FormControl, Card, CardContent, FormHelperText} from '@mui/material';
