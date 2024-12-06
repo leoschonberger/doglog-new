@@ -1,4 +1,10 @@
-// Page to get all the statistics of a dog
+/*
+dogStats.jsx
+
+Service functions for calculating dog statistics based on the events associated with a dog.
+Functions include calculating the average bathroom events per week, total events, bathroom to meal ratio
+and time since last bathroom event.
+*/
 import { fetchPins } from './dogService';
 
 // Function to fetch all events for a specific dog

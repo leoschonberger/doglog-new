@@ -1,3 +1,9 @@
+/*
+DogActionsDropdown.jsx
+
+Dropdown Component associated with each dog card component, allowing update and delete actions. Handles calls to
+UpdateDog and RemoveDog components depending on action from user.
+*/
 
 import RemoveDog from './RemoveDog';
 import UpdateDog from './UpdateDog';
