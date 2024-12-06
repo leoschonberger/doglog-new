@@ -1,4 +1,6 @@
 // Navbar.js
+// This file contains the Navbar component which displays the navigation bar with links to different pages and handles user authentication state.
+
 import React from 'react';
 import { AppBar, Toolbar, Typography, Button, Box, useMediaQuery } from '@mui/material';
 import { useAuth } from '../components/AuthContext'; // Access user context
@@ -31,15 +33,12 @@ const Navbar = () => {
         {/* Favicon and Title */}
         <Box display="flex" alignItems="center">
           <img src={favicon} alt="DogLog Logo" style={{ width: 32, height: 32, marginRight: 8 }} />
-          {!isSmallScreen && (
-            <Typography variant="h3" component="div" sx={{ flexGrow: 1 }}>
-              DogLog
-            </Typography>
-          )}
+          <Typography variant="h3" component="div" sx={{ flexGrow: 1 }}>
+            DogLog
+          </Typography>
         </Box>
-        {/* Link to Map */}
+        {/* Navigation Links */}
         <Button color="inherit" component={Link} to="/map">Map</Button>
-        {/* Link to Activity page */}
         <Button color="inherit" component={Link} to="/activity">Activity</Button>
         {user ? (
           <>
