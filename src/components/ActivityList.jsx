@@ -1,3 +1,19 @@
+/*
+ * This file represents the ActivityList component which displays a list of activities (pins) on the activity page.
+ * 
+ * Group Name: Doo Doo Data
+ * 
+ * Authors:
+ * - Leo Schonberger
+ * - Sterling Miller
+ * 
+ * Component: ActivityList
+ * Description: This component displays a user's logged events (pins) on the activity page. It fetches the pins from the database and displays them in a list format. The pins are stored in the pins collection in Firestore. It also allows users to filter pins by dog.
+ * Created by: Leo Schonberger
+ * Last updated by: Leo Schonberger
+ * Last updated on: 2024-12-6
+ */
+
 import React, { useEffect, useState } from 'react';
 import { Box, MenuItem, Select, InputLabel, FormControl, Typography, Card, CardContent, Button, Stack } from '@mui/material';
 import { useAuth } from '../components/AuthContext';

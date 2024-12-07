@@ -1,5 +1,20 @@
 // Achievements.jsx
 
+/*
+ * This file represents the Achievements component which displays a user's earned achievements on the profile page.
+ * 
+ * Group Name: Doo Doo Data
+ * 
+ * Authors:
+ * - Leo Schonberger
+ * 
+ * Component: Achievements
+ * Description: This component displays a user's earned achievements on the profile page. It fetches the user's achievements from the database and displays them in a grid format. The achievements are stored in the userAchievements collection in Firestore.
+ * Created by: Leo Schonberger
+ * Last updated by: Leo Schonberger
+ * Last updated on: 2024-12-6
+ */
+
 import React, { useEffect, useState } from 'react';
 import { Box, Typography, Tooltip } from '@mui/material';
 import { useAuth } from '../components/AuthContext';

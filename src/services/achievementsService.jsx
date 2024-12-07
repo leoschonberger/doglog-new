@@ -1,6 +1,21 @@
 // This file provides the Firestore database service for the achievements collection.
 // This is only for managing acheivment types by admins, not for tracking user achievements. (See userAchievementsService.jsx)
 
+/*
+ * This file was mainly for debugging the achievements feature. It was used to add new achievements to the database. There is no user interface for this feature, so it was only used by developers to add new achievements to the database during development.
+ * 
+ * Group Name: Doo Doo Data
+ * 
+ * Authors:
+ * - Leo Schonberger
+ * 
+ * Component: achievementsService
+ * Description: This was a service file for adding new achievement types to the achievements collection in Firestore. It was used by developers to add new achievements to the database during development. It was not used in the final version of the app.
+ * Created by: Leo Schonberger
+ * Last updated by: Leo Schonberger
+ * Last updated on: 2024-12-6
+ */
+
 import { db } from '../config/firebase'; // Firebase initialization file
 import { collection, doc, setDoc, getDoc, getDocs } from 'firebase/firestore';
 

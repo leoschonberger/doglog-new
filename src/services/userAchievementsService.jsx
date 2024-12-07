@@ -1,4 +1,18 @@
-// Achievements service to interact with the userAchievements collection in Firestore. This service provides funtions to retrieve, add, and remove achievements for a specific user. It also includes a function to check if a user has completed any new achievements based on certain criteria.
+// userAchievementsService.jsx
+/*
+ * This file contains the userAchievementsService component which provides functions to interact with the userAchievements collection in Firestore.
+ * 
+ * Group Name: Doo Doo Data
+ * 
+ * Authors:
+ * - Leo Schonberger
+ * 
+ * Component: userAchievementsService
+ * Description: This service file provides functions to interact with the userAchievements collection in Firestore. It includes functions to retrieve, add, and remove achievements for a specific user. It also includes a function to check if a user has completed any new achievements based on certain criteria. This is primarily used by the Achievements component to fetch and display the user's achievements on the profile page.
+ * Created by: Leo Schonberger
+ * Last updated by: Leo Schonberger
+ * Last updated on: 2024-12-6
+ */
 
 import { db } from '../config/firebase'; // Firebase initialization file
 import { collection, doc, getDoc, updateDoc, setDoc, getDocs, query, where } from 'firebase/firestore';
@@ -153,10 +167,12 @@ export const checkAndAddAchievements = async (userId) => {
 
     // Check and add achievements
     for (const criteria of achievementCriteria) {
+      // Check for the poop achievements
       if (criteria.poopCount && restroomEventCount >= criteria.poopCount && !userAchievements.some(ach => ach.id === criteria.id)) {
         await addUserAchievement(userId, { ...criteria, earnedAt: new Date().toISOString() });
       }
 
+      // Check for the night owl achievement
       if (criteria.timeRangeStart && criteria.timeRangeEnd) {
         console.log('Checking night owl achievement');
         const nightOwlAchievement = querySnapshot.docs.some(doc => {
@@ -170,6 +186,7 @@ export const checkAndAddAchievements = async (userId) => {
         }
       }
 
+      // Check for the streak achievement
       if (criteria.streakDays) {
         const dates = querySnapshot.docs.map(doc => doc.data().timestamp.toDate().toDateString());
         const uniqueDates = [...new Set(dates)];
@@ -194,6 +211,7 @@ export const checkAndAddAchievements = async (userId) => {
         }
       }
 
+      // Check for the super feeder achievement
       if (criteria.feedCount) {
         const feedEvents = querySnapshot.docs.filter(doc => doc.data().event === 'Meal');
         const feedCounts = {};
