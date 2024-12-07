@@ -18,7 +18,7 @@ The login page is the first page you will see when you visit the site. You can l
 - If you're an existing user, you'll be taken to the Map Page.
 
 ### Map Page:
-The map page shows a map of the world with markers for each location event that you've logged.
+The map page shows a map of the world with markers for each location event that you've logged. It also allows you to create new pins.
 - You can view pins by dragging the map around or zooming in and out. The black paw marker is your current location if you've allowed location access.
 - You can click on the markers to see more information about the event. 
 - You can also add new events by filling out the form on the left side of the page.
