@@ -2,8 +2,7 @@
 // This file contains the MapPage component which combines the Map and PinInputForm components to display the map and handle pin input.
 
 import React, { useState, useEffect } from 'react';
-import { Box } from '@mui/material';
-import Grid2 from '@mui/material/Unstable_Grid2'; // Import Grid2 for layout
+import { Box, Grid2 } from '@mui/material';
 import Map from '../components/Map';
 import PinInputForm from '../components/PinInputForm';
 import { fetchPins } from '../services/pinService';
